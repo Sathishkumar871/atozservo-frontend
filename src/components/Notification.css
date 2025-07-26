@@ -1,0 +1,44 @@
+.notification-wrapper {
+  position: fixed;
+  top: 6px;
+  right: 70px;
+  background: linear-gradient(to right, #f76b1c, #ff7e5f);
+  border-radius: 40px;
+  display: flex;
+  align-items: center;
+  padding: 3px 4px;
+  gap: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  z-index: 1000;
+}
+
+.plus-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bell-btn {
+  background: white;
+  color: #333;
+  padding: 8px;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.red-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+}

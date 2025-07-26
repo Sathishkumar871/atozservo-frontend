@@ -1,0 +1,84 @@
+/* Root container */
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Header */
+.profile-header {
+  background: linear-gradient(135deg, #ff6a00, #ee0979, #5628ee);
+  color: white;
+  padding: 32px 20px 24px 20px;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+  text-align: left;
+  position: relative;
+}
+
+.profile-header .user-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3px solid white;
+  object-fit: cover;
+  position: absolute;
+  bottom: -35px;
+  left: 20px;
+}
+
+.profile-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 4px;
+}
+
+.profile-header p {
+  font-size: 14px;
+  color: #f0f0f0;
+}
+
+/* Options List */
+.profile-options {
+  margin-top: 60px;
+  padding: 0 20px;
+  flex: 1;
+}
+
+.profile-option {
+  display: flex;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+}
+
+.profile-option i {
+  font-size: 20px;
+  margin-right: 14px;
+  color: #6c63ff;
+}
+
+/* Bottom navigation */
+.bottom-nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+}
+
+.bottom-nav i {
+  font-size: 20px;
+  color: #777;
+}
+
+.bottom-nav .active {
+  color: #6c63ff;
+}

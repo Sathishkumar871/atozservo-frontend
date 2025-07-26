@@ -1,0 +1,90 @@
+.side-policy-panel {
+  position: fixed;
+  top: 10vh;
+  right: 0;
+  width: 280px;
+  max-height: 80vh;
+  background: #fff;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  padding: 24px 20px;
+  overflow-y: auto;
+  animation: bounceSlideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+@keyframes bounceSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.policy-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #2b7cff;
+  margin-bottom: 18px;
+}
+
+.policy-header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.policy-close {
+  font-size: 20px;
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+}
+
+.policy-body {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.policy-section {
+  background: #f9fbff;
+  padding: 16px 18px;
+  border-left: 4px solid #2b7cff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(43, 124, 255, 0.06);
+}
+
+.policy-section h3 {
+  margin-bottom: 8px;
+  font-size: 15px;
+  color: #2b7cff;
+}
+
+.policy-section p,
+.policy-section li {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.6;
+}
+
+.policy-section ul {
+  padding-left: 18px;
+  list-style: disc;
+}
+
+.policy-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #888;
+  margin-top: 30px;
+}

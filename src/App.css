@@ -1,0 +1,51 @@
+/* App.css */
+
+:root {
+  --background-dark: #1C1C2F;
+  --text-light: #ECECEC;
+  --accent-call: #9B59B6;
+  --header-light-transparent: rgba(142, 68, 173, 0.3);
+  --white-glow: 0 0 10px rgba(255, 255, 255, 0.3);
+  --background: linear-gradient(135deg, #0a0a1a, #1a0a2a, #0a1a2a);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #fff;
+  color: #333;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100vw;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-smoothing: grayscale;
+
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-drag: none;
+  touch-action: manipulation;
+}
+
+/* Optional: Scrollbar customization */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
+}

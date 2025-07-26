@@ -1,0 +1,126 @@
+/* 🔹 Bottom Navigation Container */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  background: #ffffff;
+  border-top: 1px solid #e0e0e0;
+   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.09);
+  animation: navDrop 0.5s ease forwards;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 70px;
+  z-index: 1000;
+}
+
+@keyframes navDrop {
+  0% { transform: translateY(100px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* 🔹 Nav Item Styling */
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #555;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-item:hover {
+  color: #007bff;
+  transform: scale(1.07);
+}
+
+.nav-item.active {
+  color: #007bff;
+}
+
+.icon {
+  font-size: 24px;
+  transition: transform 0.3s ease;
+}
+
+.nav-label {
+  font-size: 10px;
+  margin-top: 4px;
+}
+
+/* 🔹 Post Button Styling */
+.post-button-wrapper {
+  position: relative;
+  margin-top: -35px;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+.post-glow-circle {
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at center, #00d4ff, #007bff);
+  border-radius: 50%;
+  box-shadow:
+    0 0 15px rgba(0, 123, 255, 0.6),
+    0 0 25px rgba(0, 123, 255, 0.3) inset;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.4s ease;
+  animation: pulse 1.6s infinite, bounce 3s infinite, sparkle 6s infinite;
+  background-size: 300% 300%;
+  transform-style: preserve-3d;
+}
+
+.post-button-wrapper:hover .post-glow-circle {
+  transform: scale(1.2) rotateZ(2deg);
+  box-shadow: 0 0 35px rgba(0, 123, 255, 0.9);
+  background-position: 100% 50%;
+}
+
+.post-glow-circle:active {
+  transform: scale(0.9);
+  box-shadow: 0 0 40px rgba(0, 123, 255, 1);
+}
+
+.post-icon {
+  color: #fff;
+  font-size: 30px;
+  filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
+}
+
+/* 🔹 Animations */
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 14px rgba(0, 123, 255, 0.6); }
+  50% { box-shadow: 0 0 25px rgba(0, 123, 255, 0.9); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes sparkle {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* 🔹 Mobile Responsiveness */
+@media (max-width: 600px) {
+  .bottom-nav { height: 60px; }
+  .icon { font-size: 22px; }
+  .nav-label { font-size: 9px; }
+  .post-glow-circle { width: 54px; height: 54px; }
+  .post-icon { font-size: 28px; }
+}
+
+/* 🔹 Larger Screens */
+@media (min-width: 1024px) {
+  .bottom-nav { height: 70px; }
+  .icon { font-size: 26px; }
+  .nav-label { font-size: 12px; }
+  .post-glow-circle { width: 60px; height: 60px; }
+  .post-icon { font-size: 30px; }
+}

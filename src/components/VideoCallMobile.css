@@ -1,0 +1,332 @@
+/* src/components/VideoCallMobile.css */
+
+:root {
+  --background-dark: #1C1C2F;
+  --text-light: #ECECEC;
+  --accent-call: #9B59B6; /* Purple for call elements */
+  --header-light-transparent: rgba(142, 68, 173, 0.3);
+  --white-glow: rgba(255, 255, 255, 0.12);
+  --red-end-call: #E74C3C; /* Red for end call button */
+  --red-end-call-hover: #C0392B;
+  --control-btn-bg: rgba(255, 255, 255, 0.1);
+  --control-btn-off-bg: rgba(255, 0, 0, 0.3);
+}
+
+.video-call-wrapper {
+  width: 100%; /* Take full width on all screens */
+  min-height: 100vh;
+  background: var(--background-dark); /* Specific background for this component */
+  color: var(--text-light);
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: none; /* Box shadow handled by App.css global background */
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  padding-top: 50px; /* Adjusted to be below the global top-bar */
+}
+
+/* Connecting Screen Styles */
+.connecting-screen {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.8rem;
+  background: var(--background-dark);
+  text-align: center;
+  padding: 20px;
+}
+
+.connecting-screen p {
+  font-size: 1.3rem;
+  color: #ccc;
+}
+
+.connecting-screen .spinner {
+  border: 7px solid rgba(255, 255, 255, 0.3);
+  border-top: 7px solid var(--accent-call);
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  animation: spin 1s linear infinite;
+}
+
+.cancel-call-btn {
+  background: var(--red-end-call);
+  border: none;
+  border-radius: 50%;
+  width: 75px;
+  height: 75px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.4);
+  margin-top: 2.5rem;
+}
+
+.cancel-call-btn:hover {
+  background: var(--red-end-call-hover);
+  transform: scale(1.08);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+}
+
+.cancel-call-btn svg {
+  margin-bottom: 5px;
+}
+
+/* Video Header (during call) */
+.video-header {
+  position: absolute;
+  top: 50px; /* Adjusted to be below the global top-bar */
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.2rem;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7), rgba(0,0,0,0));
+  z-index: 10;
+  color: var(--text-light);
+}
+
+.video-header .profile-pic img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 3px solid var(--accent-call);
+  object-fit: cover;
+  margin-right: 12px;
+}
+
+.video-header .call-time {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+/* Video Area */
+.video-area {
+  flex-grow: 1;
+  position: relative;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-area .caller-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+.video-area .local-video {
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+  width: 140px;
+  height: 105px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 3px solid var(--accent-call);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+  z-index: 15;
+  transform: scaleX(-1);
+}
+
+/* Call Controls */
+.call-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1.8rem 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0));
+  z-index: 10;
+}
+
+.control-btn {
+  background: var(--control-btn-bg);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light);
+  font-size: 1.6rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.control-btn.off {
+  background: var(--control-btn-off-bg);
+  color: white;
+}
+
+.control-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.end-call-btn {
+  background: var(--red-end-call);
+  border: none;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
+}
+
+.end-call-btn:hover {
+  background: var(--red-end-call-hover);
+  transform: scale(1.1);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+}
+
+/* Keyframe for spinner */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* --- Responsive Adjustments --- */
+
+/* For Tablets and larger phones (e.g., width > 600px) */
+@media (min-width: 600px) {
+  .video-call-wrapper {
+    padding: 20px 0;
+  }
+
+  /* Internal content wrappers get max-width and auto-margin */
+  .connecting-screen,
+  .video-header,
+  .call-controls {
+    max-width: 900px; /* Max width for content within these sections */
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .connecting-screen p {
+    font-size: 1.4rem;
+  }
+  .connecting-screen .spinner {
+    width: 80px;
+    height: 80px;
+    border-width: 8px;
+  }
+  .cancel-call-btn {
+    width: 85px;
+    height: 85px;
+    font-size: 1.2rem;
+  }
+
+  .video-header {
+    padding: 1.5rem;
+  }
+  .video-header .profile-pic img {
+    width: 60px;
+    height: 60px;
+  }
+  .video-header .call-time {
+    font-size: 1.5rem;
+  }
+  .video-area .local-video {
+    width: 160px;
+    height: 120px;
+    bottom: 30px;
+    right: 30px;
+  }
+  .call-controls {
+    padding: 2rem 1.5rem;
+  }
+  .control-btn {
+    width: 70px;
+    height: 70px;
+    font-size: 1.8rem;
+  }
+  .end-call-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 2.2rem;
+  }
+}
+
+/* For Desktops and larger screens (e.g., width > 900px) */
+@media (min-width: 900px) {
+  .video-call-wrapper {
+    padding: 30px 0;
+  }
+
+  /* Internal content wrappers get wider max-width */
+  .connecting-screen,
+  .video-header,
+  .call-controls {
+    max-width: 1200px; /* Even wider max-width for content on larger desktops */
+  }
+
+  .connecting-screen p {
+    font-size: 1.6rem;
+  }
+  .connecting-screen .spinner {
+    width: 90px;
+    height: 90px;
+    border-width: 9px;
+  }
+  .cancel-call-btn {
+    width: 95px;
+    height: 95px;
+    font-size: 1.4rem;
+  }
+
+  .video-header {
+    padding: 2rem;
+  }
+  .video-header .profile-pic img {
+    width: 70px;
+    height: 70px;
+  }
+  .video-header .call-time {
+    font-size: 1.8rem;
+  }
+  .video-area .local-video {
+    width: 180px;
+    height: 135px;
+    bottom: 40px;
+    right: 40px;
+  }
+  .call-controls {
+    padding: 2.5rem 2rem;
+  }
+  .control-btn {
+    width: 80px;
+    height: 80px;
+    font-size: 2.2rem;
+  }
+  .end-call-btn {
+    width: 90px;
+    height: 90px;
+    font-size: 2.5rem;
+  }
+}
