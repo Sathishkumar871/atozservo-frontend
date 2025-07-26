@@ -4,7 +4,16 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   build: {
-    outDir: '../server/frontend/dist',
+    outDir: 'dist',           // ✅ dist will be created inside current folder
+    emptyOutDir: true,        // ✅ cleans old files before build
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'], // Optional: better chunking
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000, // Optional: suppress big file warning
   },
   server: {
     host: '0.0.0.0',
@@ -22,4 +31,3 @@ export default defineConfig({
     port: Number(process.env.PORT) || 4173,
   },
 });
-
