@@ -2,10 +2,11 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base: '/',
   plugins: [react()],
+  base: './', // ✅ Use './' instead of ''
   build: {
-    outDir: 'dist', // ✅ must match what Render expects
+    outDir: '../server/frontend/dist', // Make sure this is accurate
+    emptyOutDir: true,
   },
   server: {
     proxy: {
