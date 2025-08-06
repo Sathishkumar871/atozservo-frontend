@@ -12,7 +12,7 @@ const SCOPES = [
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize";
 
 const SpotifyLogo: React.FC = () => {
-  const [showPlayer, setShowPlayer] = useState(false);
+  const [showPlayer] = useState(false);
 
   const handleLogin = () => {
     const authUrl = `${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(
