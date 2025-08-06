@@ -10,9 +10,13 @@ import io from 'socket.io-client';
 import { nanoid } from 'nanoid';
 import './join.css';
 
-const SERVER_URL = "http://localhost:5000";
-const socket = io(SERVER_URL, { transports: ['websocket'] });
 
+const SERVER_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : "https://atozservo-backend.onrender.com";
+
+const socket = io(SERVER_URL, { transports: ["websocket"] });
 interface User {
   id: string;
   name: string;

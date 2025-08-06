@@ -8,8 +8,13 @@ import { MessageCircle, Users, X, Plus, Crown, Coffee, History, Lock, Settings }
 import io from "socket.io-client";
 import './chatdesign.css';
 
-// IMPORTANT: Replace with your actual server URL
-const SERVER_URL = "http://localhost:5000"; 
+
+
+const SERVER_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : "https://atozservo-backend.onrender.com";
+
 const socket = io(SERVER_URL, { transports: ["websocket"] });
 
 // Mock data is now removed for dynamic group creation

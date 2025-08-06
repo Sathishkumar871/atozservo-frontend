@@ -54,19 +54,19 @@ const VideoCallMobile: React.FC = () => {
           }
         };
 
-        // Handle remote tracks (when remote peer's stream is received)
+        
         peer.ontrack = (event) => {
           console.log("Remote track received:", event.streams[0]);
           if (remoteVideoRef.current) {
             remoteVideoRef.current.srcObject = event.streams[0];
             setCallStatus("Call Connected");
             setCallStarted(true);
-            // Start call timer when remote stream is received
+            
             timer = setInterval(() => setCallTime(t => t + 1), 1000);
           }
         };
 
-        // Join the specific video call room on the backend
+       
         socket.emit("join-video-call-room", roomId);
 
         // Listen for SDP offers from the other peer
