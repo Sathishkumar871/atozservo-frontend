@@ -1,0 +1,116 @@
+/* MoneyLending.css */
+
+.lending-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.lending-wrapper {
+  background-color: #2b2b2b;
+  color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+
+.lending-title {
+  font-size: 2em;
+  font-weight: bold;
+  color: #ff8c00;
+  margin-bottom: 10px;
+}
+
+.lending-subtitle {
+  font-size: 1em;
+  color: #aaa;
+  margin-bottom: 25px;
+}
+
+.lending-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #e5e5e5;
+}
+
+.form-input,
+.form-input-file {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background-color: #3a3a3a;
+  color: #fff;
+  font-size: 1em;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form-input:focus {
+  border-color: #ff8c00;
+}
+
+.form-input-file {
+  color: transparent;
+  text-align: right;
+}
+
+.form-input-file::-webkit-file-upload-button {
+  visibility: hidden;
+}
+
+.form-input-file::before {
+  content: 'Choose Photos';
+  color: #fff;
+  background-color: #ff8c00;
+  display: inline-block;
+  padding: 10px 15px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 5px;
+  text-align: center;
+ 
+}
+
+.form-input-file:hover::before {
+  background-color: #e67300;
+}
+
+.send-whatsapp-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #25d366; /* WhatsApp Green */
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.2em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.send-whatsapp-btn:hover {
+  background-color: #128c7e;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}

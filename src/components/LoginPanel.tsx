@@ -38,28 +38,37 @@ const LoginPanel: React.FC<Props> = ({ onClose, onLogin }) => {
       });
 
       alert(res.data.message);
-      localStorage.setItem("token", res.data.token);
 
-      const userData = {
-        email: res.data.user.email,
-        token: res.data.token,
-        profileCompleted: res.data.user.profileCompleted || false,
-      };
+      const token = res.data.token;
+      localStorage.setItem("token", token);
 
-      // 🔐 Set deviceId if not already present
+      // Generate & store deviceId (if not already)
       let deviceId = localStorage.getItem("deviceId");
       if (!deviceId) {
         deviceId = nanoid();
         localStorage.setItem("deviceId", deviceId);
       }
 
-      // ✅ Store device in backend
+      // Store device info in backend
       await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/device/store-device`, {
-        email: userData.email,
+        email,
         deviceId,
       });
 
-      onLogin(userData);
+      // ✅ Fetch full user info
+      const userRes = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, {
+        email,
+      });
+
+      const fullUser = {
+        ...userRes.data.user,
+        token,
+      };
+
+      // Save user info in localStorage
+      localStorage.setItem("user", JSON.stringify(fullUser));
+
+      onLogin(fullUser);
       navigate("/edit-profile");
     } catch (error: any) {
       alert(error.response?.data?.message || "OTP verification failed");

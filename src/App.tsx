@@ -1,19 +1,18 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './components/Home';
 import Category from './components/Category';
-import Chat from './components/Chat';
+import ChatBackground from './components/chats/chatdeisgn'; 
 import ServiceDetails from './components/ServiceDetails';
-import ChatRoom from './components/ChatRoom';
+import ChatRoom from './components/chats/ChatRoom';
 import EditProfile from './components/EditProfile';
 import SearchResults from './components/SearchResults';
 import AccountPage from './components/AccountPage';
 import FindPartnerPage from './components/FindPartnerPage';
 import VideoCallMobile from './components/VideoCallMobile';
-import LoginPanel from './components/LoginPanel';
+import LoginPanel from './components/LoginPanel'; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import { useEffect, useState } from 'react';
 import { nanoid } from 'nanoid';
 import axios from 'axios';
@@ -21,154 +20,209 @@ import socket from './socket';
 import L from 'leaflet';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
-
 import { ServiceProvider } from './contexts/ServiceContext';
+import AtozServoChatBot from "./components/AtozServoChatBot"; 
+import YouTubeSearch from './components/YouTubeSearch';
+import SpotifyCallback from "./components/SpotifyCallback";
+import GameDesign from './components/games/gamedesign';
+import FreeFire from './components/games/FreeFireGame';
+import Pubg from './components/games/Pubg';
+import Finance from './components/finance/finance';
+import MoneyLending from './components/finance/MoneyLending';
+import PremiumTalkRoom from './components/chats/join'; // This is your join.tsx file
 
-// Leaflet fix
+// Leaflet icon fix
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
 });
 
 function App() {
-  const [user, setUser] = useState<any>(null);
-  const [loginVisible, setLoginVisible] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  const [loginVisible, setLoginVisible] = useState(false);
 
-  // ✅ Auto Login (token or deviceId)
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    const deviceId = localStorage.getItem('deviceId');
+  // ✅ Auto Login + localStorage caching
+  useEffect(() => {
+    const userString = localStorage.getItem("user");
+    const token = localStorage.getItem("token");
+    const deviceId = localStorage.getItem("deviceId");
 
-    const fetchAndSetUser = async (email: string, token: string | null = null) => {
-      try {
-        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, { email });
-        const fullUser = { ...res.data.user, token };
-        setUser(fullUser);
-      } catch (err) {
-        console.error("❌ Failed to fetch full user data", err);
-        localStorage.removeItem('token');
-      }
-    };
+    if (userString) {
+      const parsedUser = JSON.parse(userString);
+      setUser(parsedUser);
+      return;
+    }
 
-    if (token) {
-      axios
-        .post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/check-session`, { token })
-        .then((res) => {
-          if (res.data.valid) {
-            fetchAndSetUser(res.data.email, token);
-          } else {
-            localStorage.removeItem('token');
-          }
-        })
-        .catch(() => localStorage.removeItem('token'));
-    } else if (deviceId) {
-      axios
-        .post(`${import.meta.env.VITE_API_BASE_URL}/api/device/auto-login`, { deviceId })
-        .then((res) => {
-          if (res.data.user?.email) {
-            fetchAndSetUser(res.data.user.email);
-          }
-        })
-        .catch(() => console.log('❌ Device not found for auto-login'));
-    } else {
-      const newDeviceId = nanoid();
-      localStorage.setItem('deviceId', newDeviceId);
-    }
-  }, []);
+    const fetchAndSetUser = async (email: string, token: string | null = null) => {
+      try {
+        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, { email });
+        const fullUser = { ...res.data.user, token };
+        localStorage.setItem("user", JSON.stringify(fullUser));
+        setUser(fullUser);
+      } catch (err) {
+        console.error("❌ Failed to fetch user data", err);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+      }
+    };
 
-  // 🔌 Socket setup
-  useEffect(() => {
-    socket.on('connect', () => {
-      console.log('🟢 Socket Connected:', socket.id);
-    });
+    if (token) {
+      axios
+        .post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/check-session`, { token })
+        .then((res) => {
+          if (res.data.valid) {
+            fetchAndSetUser(res.data.email, token);
+          } else {
+            localStorage.removeItem("token");
+          }
+        })
+        .catch(() => localStorage.removeItem("token"));
+    } else if (deviceId) {
+      axios
+        .post(`${import.meta.env.VITE_API_BASE_URL}/api/device/auto-login`, { deviceId })
+        .then((res) => {
+          if (res.data.user?.email) {
+            fetchAndSetUser(res.data.user.email);
+          }
+        })
+        .catch(() => console.log('❌ Device not found for auto-login'));
+    } else {
+      const newDeviceId = nanoid();
+      localStorage.setItem("deviceId", newDeviceId);
+    }
+  }, []);
 
-    socket.on('disconnect', () => {
-      console.log('🔴 Socket Disconnected');
-    });
+  // 🔌 Socket setup
+  useEffect(() => {
+    socket.on('connect', () => {
+      console.log('🟢 Socket Connected:', socket.id);
+    });
 
-    return () => {
-      socket.off('connect');
-      socket.off('disconnect');
-    };
-  }, []);
+    socket.on('disconnect', () => {
+      console.log('🔴 Socket Disconnected');
+    });
 
-  return (
-    <ServiceProvider>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={<Home user={user} onLoginClick={() => setLoginVisible(true)} />}
-          />
-          <Route path="/category" element={<Category />} />
-          <Route path="/chat" element={<Chat />} />
-          <Route path="/chatroom/:id?" element={<ChatRoom />} />
-          <Route path="/services/:id" element={<ServiceDetails />} />
-          <Route path="/search" element={<SearchResults />} />
-          <Route path="/find-partner-options" element={<FindPartnerPage />} />
-          <Route path="/videocall/:id" element={<VideoCallMobile />} />
-          <Route path="/account" element={<AccountPage user={user} setUser={setUser} />} />
-          <Route
-  path="/edit-profile"
-  element={
-    user ? (
-      <EditProfile
-        user={user}
-        onClose={() => {}}
-        onComplete={async () => {
-          try {
-            const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, {
-              email: user.email,
-            });
-            setUser({ ...res.data.user, token: user.token });
-          } catch (error) {
-            console.error("❌ Failed to refresh user after profile update");
-          }
-           }}
-         />
-        ) : (
-        <p>Please log in to edit your profile.</p>
-      )
-     }
-       />
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+    };
+  }, []);
 
-        </Routes>
+  return (
+    <ServiceProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Navigate to="/home" />} />
+          <Route path="/home" element={<Home user={user} onLoginClick={() => setLoginVisible(true)} />} />
+          <Route path="/category" element={<Category />} />
+          <Route path="/chat" element={<ChatBackground />} />
+          <Route path="/chatroom/:id?" element={<ChatRoom />} />
+          <Route path="/services/:id" element={<ServiceDetails />} />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/find-partner-options" element={<FindPartnerPage />} />
+          <Route path="/videocall/:id" element={<VideoCallMobile />} />
+          <Route path="/account" element={<AccountPage user={user} setUser={setUser} onLoginClick={() => setLoginVisible(true)} />} />
+          <Route path="/youtube" element={<YouTubeSearch />} />
+          <Route path="/callback" element={<SpotifyCallback />} />
+          <Route path="/gamedesign" element={<GameDesign />} />
+          <Route path="/freefire" element={<FreeFire />} />
+          <Route path="/pubg" element={<Pubg />} /> 
+          <Route path="/finance" element={<Finance />} /> 
+          <Route path="/money-lending" element={<MoneyLending />}/>
+          <Route path="/room/:groupId" element={<PremiumTalkRoom />} /> {/* This is the new route */}
+          
+            {/* ✅ Ikkada /login route add cheyyali */}
+            <Route path="/login" element={<LoginPanel onClose={() => setLoginVisible(false)} onLogin={async (userData) => {
+                setLoginVisible(false);
+                toast.success('Login successful!');
 
-        {/* 🔐 Login Panel */}
-        {loginVisible && (
-          <LoginPanel
-            onClose={() => setLoginVisible(false)}
-            onLogin={async (userData) => {
-              setLoginVisible(false);
-              toast.success('Login successful!');
+                const deviceId = localStorage.getItem('deviceId') || nanoid();
+                localStorage.setItem('deviceId', deviceId);
 
-              const deviceId = localStorage.getItem('deviceId') || nanoid();
-              localStorage.setItem('deviceId', deviceId);
+                await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/device/store-device`, {
+                    email: userData.email,
+                    deviceId,
+                });
 
-              await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/device/store-device`, {
-                email: userData.email,
-                deviceId,
-              });
+                const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, {
+                    email: userData.email,
+                });
 
-              const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, {
-                email: userData.email,
-              });
+                const fullUser = {
+                    ...res.data.user,
+                    token: userData.token || null,
+                };
 
-              const fullUser = {
-                ...res.data.user,
-                token: userData.token || null,
-              };
+                localStorage.setItem("token", userData.token || "");
+                localStorage.setItem("user", JSON.stringify(fullUser));
+                setUser(fullUser);
+            }} />} />
 
-              setUser(fullUser);
-            }}
-          />
-        )}
-      </Router>
+          <Route
+            path="/edit-profile"
+            element={
+              user ? (
+                <EditProfile
+                  user={user}
+                  onClose={() => {}}
+                  onComplete={async () => {
+                    try {
+                      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, {
+                        email: user.email,
+                      });
+                      const updatedUser = { ...res.data.user, token: user.token };
+                      setUser(updatedUser);
+                      localStorage.setItem("user", JSON.stringify(updatedUser));
+                    } catch (error) {
+                      console.error("❌ Failed to refresh user after profile update");
+                    }
+                  }}
+                />
+              ) : (
+                <p>Please log in to edit your profile.</p>
+              )
+            }
+          />
+        </Routes>
 
-      <ToastContainer position="top-center" autoClose={2000} theme="colored" pauseOnHover closeOnClick />
-    </ServiceProvider>
-  );
+        {/* 🔐 Login Panel */}
+        {loginVisible && (
+          <LoginPanel
+            onClose={() => setLoginVisible(false)}
+            onLogin={async (userData) => {
+              setLoginVisible(false);
+              toast.success('Login successful!');
+
+              const deviceId = localStorage.getItem('deviceId') || nanoid();
+              localStorage.setItem('deviceId', deviceId);
+
+              await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/device/store-device`, {
+                email: userData.email,
+                deviceId,
+              });
+
+              const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/otp/get-user`, {
+                email: userData.email,
+              });
+
+              const fullUser = {
+                ...res.data.user,
+                token: userData.token || null,
+              };
+
+              localStorage.setItem("token", userData.token || "");
+              localStorage.setItem("user", JSON.stringify(fullUser));
+              setUser(fullUser);
+            }}
+          />
+        )}
+      </Router>
+
+      <ToastContainer position="top-center" autoClose={2000} theme="colored" pauseOnHover closeOnClick />
+      <AtozServoChatBot />
+    </ServiceProvider>
+  );
 }
 
 export default App;

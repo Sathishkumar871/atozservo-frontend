@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import Notification from "./Notification";
 import BottomNav from "./BottomNav";
 import PostServiceForm from "./PostServiceForm";
+
 import "./Home.css";
 
 interface User {
@@ -20,6 +21,7 @@ interface Props {
 const Home: React.FC<Props> = ({ user, onLoginClick }) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const [isPanelOpen] = useState(false);
+  const [showPipedPlayer, setShowPipedPlayer] = useState(false); // ⬅️ Add this line
 
   const handlePostClick = () => {
     if (!user) {
@@ -29,11 +31,15 @@ const Home: React.FC<Props> = ({ user, onLoginClick }) => {
     }
   };
 
+  const handleYouTubeClick = () => {
+    setShowPipedPlayer(true); // ⬅️ Show PipedPlayer
+  };
+
   return (
     <>
       <header className="sticky-header">
         <div className="header-content">
-          <div className="logo-section">
+          <div className="logo-section" onClick={handleYouTubeClick}> {/* ⬅️ Add onClick */}
             <img
               src="https://res.cloudinary.com/dlkborjdl/image/upload/v1751882045/WhatsApp_Image_2025-07-05_at_22.20.45_59cde82e_cavjfj.jpg"
               alt="AtoZ Logo"
@@ -52,6 +58,13 @@ const Home: React.FC<Props> = ({ user, onLoginClick }) => {
         <div className="long-box">
           <h1>Welcome to AtoZ Services!</h1>
         </div>
+
+        {showPipedPlayer && (
+          <div className="youtube-player-wrapper">  {/* You can style this in CSS */}
+           
+          </div>
+        )}
+
       </main>
 
       {showPostForm && user && (

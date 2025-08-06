@@ -21,21 +21,19 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
   const [addressType, setAddressType] = useState('');
   let holdTimer: NodeJS.Timeout;
 
-  // Prefill user data
   useEffect(() => {
     if (user) {
       setGender(user.gender || '');
       setName(user.name || '');
       setMobile(user.phone || '');
-      setPincode(user.address?.pincode || '');
-      setVillage(user.address?.village || '');
-      setHouse(user.address?.house || '');
-      setArea(user.address?.area || '');
-      setAddressType(user.address?.type || '');
+      setPincode(user.pincode || '');
+      setVillage(user.village || '');
+      setHouse(user.house || '');
+      setArea(user.area || '');
+      setAddressType(user.addressType || '');
     }
   }, [user]);
 
-  // Village list based on pincode
   useEffect(() => {
     const pincodeMap: Record<string, string[]> = {
       '533289': ['Burugupudi', 'Butchempeta', 'Dosakayalapalle', 'Gadala', 'Gadarada', 'jambupatnam', 'kanupuru', 'Kapavaram', 'Korukonda', 'Koti', 'Kotikesavaram', 'Madurapudi', 'Munagala', 'Narasapuram', 'Nidigatla', 'Ragavapuram', 'Srirangapatnam'],
@@ -45,17 +43,11 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
       '533105': ['Katheru', 'Rajahmundry Urban'],
     };
 
-    if (pincodeMap[pincode]) {
-      setVillageList(pincodeMap[pincode]);
-    } else {
-      setVillageList([]);
-    }
+    setVillageList(pincodeMap[pincode] || []);
   }, [pincode]);
 
-  // Save handler
   const handleSave = async () => {
     const data = {
-      email: user?.email,
       gender,
       name,
       phone: mobile,
@@ -68,23 +60,32 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
     };
 
     try {
-      // This line is sending the request correctly from the frontend
-      const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/api/update-profile`, data);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        alert("❌ No token found. Please log in again.");
+        return;
+      }
+
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_BASE_URL}/api/user/update-profile`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       console.log("✅ Profile updated:", res.data);
       alert("✅ Profile saved successfully!");
       onComplete();
       onClose();
     } catch (err) {
       console.error("❌ Failed to update profile", err);
-      // More specific error handling for user feedback
       if (axios.isAxiosError(err) && err.response) {
-        if (err.response.status === 404) {
-          alert("❌ Update endpoint not found on server. Please check backend configuration.");
-        } else {
-          alert(`❌ Profile update failed: ${err.response.data?.message || 'Server error.'}`);
-        }
+        alert(`❌ Profile update failed: ${err.response.data?.message || 'Server error.'}`);
       } else {
-        alert("❌ Profile update failed. Please try again. (Network error or unexpected issue)");
+        alert("❌ Profile update failed. Network error or unexpected issue.");
       }
     }
   };
@@ -92,8 +93,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
   return (
     <div className="fullscreen-panel">
       <div className="edit-profile-container">
-
-        {/* Gender select */}
         {gender === '' ? (
           <div className="gender-select">
             <img
@@ -112,10 +111,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
             />
           </div>
         ) : (
-          <div
-            className="profile-banner"
-            style={{ backgroundColor: gender === 'Female' ? '#60A5FA' : '#C4B5FD' }}
-          >
+          <div className="profile-banner" style={{ backgroundColor: gender === 'Female' ? '#60A5FA' : '#C4B5FD' }}>
             <div
               className="profile-logo"
               onMouseDown={() => {
@@ -144,7 +140,6 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
           </div>
         )}
 
-        {/* Form content */}
         <div className="form-content">
           <div className="input-group">
             <input value={name} onChange={(e) => setName(e.target.value)} placeholder=" " required />
@@ -178,9 +173,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
             </div>
           ) : (
             pincode.length === 6 && (
-              <div className="location-message">
-                🤷‍♂ Location not found for this pincode. We're working on expanding coverage!
-              </div>
+              <div className="location-message">🤷‍♂ Location not found for this pincode.</div>
             )
           )}
 
@@ -195,7 +188,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ user, onClose, onComplete }) 
           </div>
 
           <div className="input-group">
-            <select value={addressType} onChange={e => setAddressType(e.target.value)} required>
+            <select value={addressType} onChange={(e) => setAddressType(e.target.value)} required>
               <option value="">Select Address Type</option>
               <option value="Home">Home</option>
               <option value="Work">Work</option>

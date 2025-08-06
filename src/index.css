@@ -6,3 +6,6 @@ html, body {
   overscroll-behavior: none;
   touch-action: manipulation;
 }
+img {
+  border-radius: 0;
+}

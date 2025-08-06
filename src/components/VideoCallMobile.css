@@ -1,33 +1,33 @@
-/* src/components/VideoCallMobile.css */
+
 
 :root {
   --background-dark: #1C1C2F;
   --text-light: #ECECEC;
-  --accent-call: #9B59B6; /* Purple for call elements */
+  --accent-call: #9B59B6; 
   --header-light-transparent: rgba(142, 68, 173, 0.3);
   --white-glow: rgba(255, 255, 255, 0.12);
-  --red-end-call: #E74C3C; /* Red for end call button */
+  --red-end-call: #E74C3C; 
   --red-end-call-hover: #C0392B;
   --control-btn-bg: rgba(255, 255, 255, 0.1);
   --control-btn-off-bg: rgba(255, 0, 0, 0.3);
 }
 
 .video-call-wrapper {
-  width: 100%; /* Take full width on all screens */
+  width: 100%; 
   min-height: 100vh;
-  background: var(--background-dark); /* Specific background for this component */
+  background: var(--background-dark);
   color: var(--text-light);
   font-family: 'Segoe UI', sans-serif;
-  box-shadow: none; /* Box shadow handled by App.css global background */
+  box-shadow: none; 
   overflow: hidden;
   position: relative;
   display: flex;
   flex-direction: column;
   transition: all 0.3s ease;
-  padding-top: 50px; /* Adjusted to be below the global top-bar */
+  padding-top: 50px; 
 }
 
-/* Connecting Screen Styles */
+
 .connecting-screen {
   flex-grow: 1;
   display: flex;
@@ -83,10 +83,10 @@
   margin-bottom: 5px;
 }
 
-/* Video Header (during call) */
+
 .video-header {
   position: absolute;
-  top: 50px; /* Adjusted to be below the global top-bar */
+  top: 50px; 
   left: 0;
   right: 0;
   display: flex;
@@ -112,7 +112,7 @@
   font-weight: bold;
 }
 
-/* Video Area */
+
 .video-area {
   flex-grow: 1;
   position: relative;
@@ -143,7 +143,7 @@
   transform: scaleX(-1);
 }
 
-/* Call Controls */
+
 .call-controls {
   position: absolute;
   bottom: 0;
@@ -205,25 +205,25 @@
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
 }
 
-/* Keyframe for spinner */
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* --- Responsive Adjustments --- */
 
-/* For Tablets and larger phones (e.g., width > 600px) */
+
+
 @media (min-width: 600px) {
   .video-call-wrapper {
     padding: 20px 0;
   }
 
-  /* Internal content wrappers get max-width and auto-margin */
+
   .connecting-screen,
   .video-header,
   .call-controls {
-    max-width: 900px; /* Max width for content within these sections */
+    max-width: 900px;
     margin-left: auto;
     margin-right: auto;
   }

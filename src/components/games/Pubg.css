@@ -1,0 +1,295 @@
+/* Pubg.css */
+
+/* Main container for centering content */
+body {
+  overflow: hidden;
+}
+
+.pubg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Card wrapper for premium look */
+.card-wrapper {
+  background: linear-gradient(145deg, #2b2b2b, #1a1a1a);
+  border-radius: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+  padding: 30px;
+  color: #fff;
+  text-align: center;
+  max-width: 450px;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Image container for animation */
+.image-container {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 20px;
+}
+
+.game-image {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 2;
+}
+
+/* Animated Ring - Orange & Black */
+.animated-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  animation: pubg-animation 1.5s ease-out forwards;
+  z-index: 1;
+}
+
+/* Keyframes for the new animation (Orange & Black) */
+@keyframes pubg-animation {
+  0% {
+    border-top-color: rgba(255, 165, 0, 0); /* Orange */
+    border-right-color: rgba(255, 165, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);   /* Black */
+    border-left-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  25% {
+    border-top-color: rgba(255, 165, 0, 0.8);
+    border-right-color: rgba(255, 165, 0, 0);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  50% {
+    border-top-color: rgba(255, 165, 0, 0.8);
+    border-right-color: rgba(0, 0, 0, 0.8);
+    border-bottom-color: rgba(0, 0, 0, 0);
+    border-left-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) rotate(180deg);
+  }
+  75% {
+    border-top-color: rgba(255, 165, 0, 0.8);
+    border-right-color: rgba(0, 0, 0, 0.8);
+    border-bottom-color: rgba(255, 165, 0, 0.8);
+    border-left-color: rgba(0, 0, 0, 0);
+    transform: translate(-50%, -50%) rotate(270deg);
+  }
+  100% {
+    border-top-color: rgba(255, 165, 0, 0.8);
+    border-right-color: rgba(0, 0, 0, 0.8);
+    border-bottom-color: hsla(39, 100%, 50%, 0.8);
+    border-left-color: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 10px 5px rgba(255, 165, 0, 0.5); /* Glowing effect */
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Details fade-in animation */
+.details-container {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.details-container.fade-in {
+  opacity: 1;
+}
+
+/* Other details styling */
+.game-title {
+  font-size: 2em;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #e5e5e5;
+}
+
+.details-section {
+  background-color: #2a2a2a;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.section-title {
+  font-size: 1.2em;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #ff6e00;
+}
+
+.rules-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+}
+
+.rules-list li {
+  margin-bottom: 5px;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.entry-fee-select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #3a3a3a;
+  color: #fff;
+  border: 1px solid #555;
+  outline: none;
+}
+
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.instructions-btn,
+.battle-btn {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 50px;
+  font-size: 1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.instructions-btn {
+  background-color: #4a4a4a;
+  color: #e5e5e5;
+}
+
+.instructions-btn:hover {
+  background-color: #5a5a5a;
+  transform: translateY(-2px);
+}
+
+.battle-btn {
+  background: linear-gradient(90deg, #ff8c00, #ffb600); /* Orange */
+  color: #fff;
+}
+
+.battle-btn:hover {
+  background: linear-gradient(90deg, #e67e00, #e6a300);
+  transform: translateY(-2px);
+}
+
+/* Modal Styles */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  animation: modal-fade-in 0.3s ease-in-out;
+}
+
+.modal-content {
+  background-color: #2b2b2b;
+  color: #fff;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+  padding: 25px;
+  max-width: 400px;
+  width: 90%;
+  position: relative;
+  transform: scale(0.9);
+  animation: modal-zoom-in 0.3s ease-in-out forwards;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #3a3a3a;
+  padding-bottom: 10px;
+}
+
+.modal-title {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #ff9900;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 2em;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #ff4d4d;
+}
+
+.modal-body p {
+  margin-bottom: 15px;
+  font-size: 0.9em;
+  color: #ccc;
+}
+
+.modal-rules-list {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  margin-left: 10px;
+  margin-bottom: 15px;
+}
+
+.modal-rules-list li {
+  margin-bottom: 8px;
+  color: #eee;
+  font-size: 0.9em;
+}
+
+.modal-rules-list li span {
+  margin-right: 8px;
+}
+
+.modal-disclaimer {
+  font-style: italic;
+  font-size: 0.8em;
+  color: #777;
+}
+
+/* Modal Animations */
+@keyframes modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modal-zoom-in {
+  from { transform: scale(0.5); }
+  to { transform: scale(1); }
+}

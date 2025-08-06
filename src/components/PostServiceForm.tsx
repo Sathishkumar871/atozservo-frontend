@@ -87,14 +87,14 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
     }
   };
 
-  // Function to clear location data
+ 
   const clearLocation = () => {
     setLocation(null);
     setAddress(null);
     toast.info("📍 Location cleared.");
   };
 
-  // Handles form submission for posting a service
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -108,15 +108,15 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
       name: serviceName,
       category,
       description,
-      // ✨✨✨ CRITICAL FIX: Convert experience AND price to numbers from strings ✨✨✨
-      experience: experience ? parseInt(experience, 10) : 0, // Parse to integer, default to 0 if empty
-      price: price ? parseFloat(price) : 0,                   // Parse to float, default to 0 if empty
+      
+      experience: experience ? parseInt(experience, 10) : 0,
+      price: price ? parseFloat(price) : 0,                  
       features,
       type,
-      location, // Pass as {lat, lng} object or null
-      address,  // Pass as string or null
-      images: uploadedImages, // Array of Cloudinary URLs - THIS IS THE KEY FIELD
-      userId: user._id, // User ID from the logged-in user
+      location, 
+      address, 
+      images: uploadedImages, 
+      userId: user._id, 
     };
 
     console.log('Frontend: Sending Post Data to Backend:', postData);

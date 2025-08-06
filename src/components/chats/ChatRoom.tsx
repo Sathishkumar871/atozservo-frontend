@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FiArrowLeft, FiPhone, FiPaperclip } from "react-icons/fi";
 import { IoSendOutline } from "react-icons/io5";
 import { FaVideo } from "react-icons/fa";
-import socket from "../socket";
+import socket from "../../socket";
 import "./ChatRoom.css";
 
 interface Message {

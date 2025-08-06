@@ -1,0 +1,84 @@
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.loan-button-wrapper {
+  position: relative;
+  display: inline-block; 
+}
+.loan-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #1f014e, #290263, #43048a);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+.loan-button:hover {
+  background: linear-gradient(135deg, #2b026d, #3d0392, #5a05b3);
+  transform: scale(1.1);
+}
+.loan-button-icon {
+  width: 20px;
+  height: 20px;
+  color: #00bcd4; 
+  transition: transform 0.3s ease-in-out;
+}
+
+.loan-button:hover .loan-button-icon {
+  transform: rotate(360deg);
+}
+.custom-tooltip {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%); 
+  white-space: nowrap; 
+  background: linear-gradient(90deg, #333, #555); 
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.9em;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transform: translateX(-50%) translateY(100%) scale(0.9);
+}
+.loan-button-wrapper:hover .custom-tooltip,
+.loan-button-wrapper .custom-tooltip { 
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(calc(100% + 10px)) scale(1); 
+}
+.custom-tooltip::before {
+  content: '';
+  position: absolute;
+  top: -8px; 
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 12px;
+  height: 12px;
+  background: #333; 
+  z-index: 9;
+  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.2);
+}
+@media (max-width: 768px) {
+  .custom-tooltip {
+    white-space: normal; 
+    max-width: 150px;
+    transform: translateX(-50%) translateY(100%) scale(0.9);
+  }
+  .loan-button-wrapper:hover .custom-tooltip,
+  .loan-button-wrapper .custom-tooltip {
+    transform: translateX(-50%) translateY(calc(100% + 10px)) scale(1);
+  }
+}

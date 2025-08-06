@@ -1,0 +1,120 @@
+.youtube-search-container {
+  padding: 20px;
+  
+}
+.search-bar-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.search-bar {
+  display: flex;
+  padding: 4px;
+  border-radius: 8px;
+  background: #f2f2f2;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 8px 0 0 8px;
+  outline: none;
+  font-size: 14px;
+}
+
+.search-bar button {
+  background-color: #cc0000;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+}
+
+/* Video player wrapper */
+.video-player-wrapper {
+  position: relative;
+  margin: 0 auto;
+  margin-top: 18px;
+  padding: 20px;
+  background: #000;
+  border-radius: 20px;
+  max-width: 1000px;
+  box-shadow: 0 0 12px rgba(255, 0, 0, 0.4), 0 0 20px rgba(0, 0, 0, 0.8);
+  animation: pulseBeat 1.6s infinite ease-in-out;
+  transition: opacity 1s ease;
+}
+
+.video-player-wrapper.fade-ui {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+@keyframes pulseBeat {
+  0% {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4), 0 0 14px rgba(0, 0, 0, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 0, 0, 0.7), 0 0 28px rgba(0, 0, 0, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4), 0 0 14px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.video-player iframe {
+  width: 100%;
+  height: 280px;
+  border-radius: 16px;
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+/* Close button */
+.close-search-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #cc0000;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+/* Video thumbnails / Suggestions */
+.yt-results {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.yt-result-item {
+  width: 200px;
+  height: 90px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.yt-result-item:hover {
+  transform: scale(1.05);
+}
+
+.yt-result-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+}

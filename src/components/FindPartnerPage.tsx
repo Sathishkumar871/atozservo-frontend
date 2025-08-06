@@ -1,3 +1,5 @@
+// ✅ Final Enhanced FindPartnerPage.tsx with all features discussed + improvements
+
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPhoneAlt, FaCommentDots, FaVideo, FaVideoSlash } from "react-icons/fa";
@@ -6,29 +8,42 @@ import { motion } from "framer-motion";
 import io from "socket.io-client";
 import "./FindPartnerPage.css";
 
-const socket = io("https://your-server-url", {
+const socket = io("https://www.atozservo.xyz", {
   transports: ["websocket"],
+  withCredentials: true,
 });
 
 interface Partner {
   name: string;
   avatar: string;
   audioOnly: boolean;
+  online?: boolean;
 }
 
 const FindPartnerPage: React.FC = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [partner, setPartner] = useState<Partner | null>(null);
   const [connecting, setConnecting] = useState(false);
-  const [timer, setTimer] = useState(600);
+  const [timer, setTimer] = useState(10800); // 3 hours
   const [cameraOn, setCameraOn] = useState(true);
+  const [searchTimeout, setSearchTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [username, setUsername] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
+    const user = localStorage.getItem("username");
+    if (user) setUsername(user);
+
     socket.on("chat_partner_found", (data: Partner) => {
       setPartner(data);
       setConnecting(true);
       setIsSearching(false);
+      clearTimeout(searchTimeout!);
+
+      new Audio("/connected.mp3").play();
+      navigator.vibrate?.(200);
+
+      localStorage.setItem("lastPartner", JSON.stringify(data));
     });
 
     const interval = setInterval(() => {
@@ -47,7 +62,16 @@ const FindPartnerPage: React.FC = () => {
 
   const findPartner = () => {
     setIsSearching(true);
-    socket.emit("find_partner");
+    socket.emit("find_partner", { username });
+
+    const timeout = setTimeout(() => {
+      if (!partner) {
+        setIsSearching(false);
+        alert("No partner found. Try again later.");
+      }
+    }, 15000);
+
+    setSearchTimeout(timeout);
   };
 
   const disconnect = () => {
@@ -55,7 +79,8 @@ const FindPartnerPage: React.FC = () => {
     setPartner(null);
     setConnecting(false);
     setIsSearching(false);
-    setTimer(600);
+    setTimer(10800);
+    localStorage.removeItem("lastPartner");
   };
 
   return (
@@ -82,7 +107,7 @@ const FindPartnerPage: React.FC = () => {
               loop
               muted
               playsInline
-              src="https://ik.imagekit.io/pimx50ija/VID_20250725112345.mp4?updatedAt=1753428059821"
+              src="https://ik.imagekit.io/pimx50ija/1754281876013.mp4?updatedAt=1754282633742"
               className="searching-video"
             />
           </motion.div>
@@ -100,28 +125,32 @@ const FindPartnerPage: React.FC = () => {
 
       {partner && connecting && (
         <div className="connected-screen">
+          <div className="you-banner">
+            <strong>You:</strong> {username}
+          </div>
           <div className="partner-card">
             <img src={partner.avatar} alt="partner avatar" className="partner-avatar" />
             <h2>{partner.name}</h2>
             <p>{partner.audioOnly ? "Audio Only" : "Video Enabled"}</p>
+            <p className={partner.online ? "online-status" : "offline-status"}>
+              {partner.online ? "Online" : "Offline"}
+            </p>
           </div>
 
           <div className="chat-actions">
             <button className="btn chat-btn" onClick={() => navigate("/chat")}>
               <FaCommentDots /> Chat
             </button>
-            <button className="btn call-btn" onClick={() => navigate("/call")}>
+            <button className="btn call-btn" onClick={() => navigate("/call")}> 
               <FaPhoneAlt /> Call
             </button>
           </div>
 
           <div className="session-timer">
             <p>
-              Session Time Left: {Math.floor(timer / 60)}:{String(timer % 60).padStart(2, "0")}
+              Time Left: {Math.floor(timer / 60)}:{String(timer % 60).padStart(2, "0")}
             </p>
-            <button className="btn end-btn" onClick={disconnect}>
-              End
-            </button>
+            <button className="btn end-btn" onClick={disconnect}>End</button>
           </div>
         </div>
       )}
