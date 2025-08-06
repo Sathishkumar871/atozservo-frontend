@@ -5,10 +5,7 @@ import { io } from "socket.io-client";
 const SOCKET_URL =
   import.meta.env.MODE === "development"
     ? "http://localhost:5000"
-    : "https://atozservo.onrender.com";
-    
-    
-
+    : import.meta.env.VITE_API_BASE_URL;
 const socket = io(SOCKET_URL, {
   transports: ["websocket"],
   withCredentials: true,
