@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Finance.css';
+import './finance.css';
 
 const Finance: React.FC = () => {
   const navigate = useNavigate();
