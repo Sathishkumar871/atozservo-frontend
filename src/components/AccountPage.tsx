@@ -12,7 +12,6 @@ import {
 import "./AccountPage.css";
 
 interface AccountPageProps {
-  // ✅ Ikkada '?' add cheyyadam valla user prop optional ga marindi
   user?: {
     email?: string;
     [key: string]: any;

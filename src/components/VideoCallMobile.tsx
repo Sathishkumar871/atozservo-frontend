@@ -108,12 +108,7 @@ const VideoCallMobile: React.FC = () => {
         });
 
 
-        // Create SDP offer if this is the first peer to initiate
-        // This logic might need refinement based on your matching system
-        // For random calls, both might try to create an offer, leading to race conditions.
-        // A better approach is for the backend to designate one peer as "offerer".
-        // For simplicity here, we assume the first one to emit "join-video-call-room"
-        // will attempt to create an offer.
+       
         peer.onnegotiationneeded = async () => {
             try {
                 const offer = await peer.createOffer();
