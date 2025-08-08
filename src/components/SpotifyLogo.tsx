@@ -3,7 +3,7 @@ import "./SpotifyLogo.css";
 import { FaSpotify } from "react-icons/fa";
 
 const CLIENT_ID = "fd2373ec00bb4b469d3f04384b81cd5b";
-const REDIRECT_URI =  "https://www.atozservo.xyz/";
+const REDIRECT_URI =  "https://atozservo.xyz/callback";
 const SCOPES = [
   "user-read-private",
   "user-read-email",

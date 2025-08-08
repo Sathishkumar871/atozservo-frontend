@@ -1,5 +1,3 @@
-// ✅ Final Enhanced FindPartnerPage.tsx with all features discussed + improvements
-
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPhoneAlt, FaCommentDots, FaVideo, FaVideoSlash } from "react-icons/fa";
@@ -7,8 +5,12 @@ import PersonSearchIcon from "@mui/icons-material/PersonSearch";
 import { motion } from "framer-motion";
 import io from "socket.io-client";
 import "./FindPartnerPage.css";
+import { toast } from 'react-toastify'; 
 
-const socket = io("https://www.atozservo.xyz", {
+
+const SOCKET_URL = import.meta.env.VITE_API_BASE_URL;
+
+const socket = io(SOCKET_URL, {
   transports: ["websocket"],
   withCredentials: true,
 });
@@ -38,8 +40,10 @@ const FindPartnerPage: React.FC = () => {
       setPartner(data);
       setConnecting(true);
       setIsSearching(false);
-      clearTimeout(searchTimeout!);
+      if (searchTimeout) clearTimeout(searchTimeout);
 
+      
+      toast.success("Partner found! Connecting now...", { autoClose: 3000 });
       new Audio("/connected.mp3").play();
       navigator.vibrate?.(200);
 
@@ -58,7 +62,7 @@ const FindPartnerPage: React.FC = () => {
       socket.off("chat_partner_found");
       clearInterval(interval);
     };
-  }, [connecting, timer]);
+  }, [connecting, timer, searchTimeout]);
 
   const findPartner = () => {
     setIsSearching(true);
@@ -67,7 +71,8 @@ const FindPartnerPage: React.FC = () => {
     const timeout = setTimeout(() => {
       if (!partner) {
         setIsSearching(false);
-        alert("No partner found. Try again later.");
+        
+        toast.error("No partner found. Try again later.");
       }
     }, 15000);
 
@@ -75,13 +80,22 @@ const FindPartnerPage: React.FC = () => {
   };
 
   const disconnect = () => {
-    socket.emit("disconnect_partner");
+   
+    socket.disconnect();
     setPartner(null);
     setConnecting(false);
     setIsSearching(false);
     setTimer(10800);
     localStorage.removeItem("lastPartner");
   };
+
+
+  const handleCall = () => {
+    if (partner) {
+      
+      navigate(`/videocall/${partner.name}`);
+    }
+  }
 
   return (
     <div className="find-partner-container">
@@ -141,7 +155,7 @@ const FindPartnerPage: React.FC = () => {
             <button className="btn chat-btn" onClick={() => navigate("/chat")}>
               <FaCommentDots /> Chat
             </button>
-            <button className="btn call-btn" onClick={() => navigate("/call")}> 
+            <button className="btn call-btn" onClick={handleCall}> 
               <FaPhoneAlt /> Call
             </button>
           </div>

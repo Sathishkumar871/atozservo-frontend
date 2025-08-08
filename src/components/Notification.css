@@ -1,9 +1,9 @@
 .notification-wrapper {
   position: fixed;
-  top: 6px;
+  top: 9px;
   right: 70px;
   background: linear-gradient(to right, #f76b1c, #ff7e5f);
-  border-radius: 40px;
+  border-radius: 67px;
   display: flex;
   align-items: center;
   padding: 3px 4px;
@@ -15,7 +15,7 @@
 .plus-btn {
   background-color: rgba(255, 255, 255, 0.2);
   color: white;
-  padding: 8px;
+  padding: 5px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -25,7 +25,7 @@
 .bell-btn {
   background: white;
   color: #333;
-  padding: 8px;
+  padding: 7px;
   border-radius: 50%;
   position: relative;
   display: flex;

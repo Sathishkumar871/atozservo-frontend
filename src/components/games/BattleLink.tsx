@@ -6,7 +6,7 @@ const images = [
   { id: 1, url: 'https://ik.imagekit.io/pimx50ija/IMG_20250804_165731.jpg?updatedAt=1754306894179', alt: 'Free Fire', name: 'Free Fire' },
   { id: 2, url: 'https://ik.imagekit.io/pimx50ija/thumb-1920-947385.jpg?updatedAt=1754320849325', alt: 'PUBG', name: 'PUBG' },
   { id: 3, url: 'https://ik.imagekit.io/pimx50ija/381347656b4efeba9c387f65628d3518.jpg?updatedAt=1754321718215', alt: 'Game 3', name: 'Game 3' },
-  // ... మీ మిగతా images
+  
 ];
 
 const BattleLink: React.FC = () => {

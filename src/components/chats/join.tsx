@@ -1,303 +1,465 @@
-// PremiumTalkRoom.tsx
-"use client";
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import {
-  Mic, Video, PhoneOff, MessageSquare,
-  CornerDownLeft, Volume2, VolumeX, VideoOff, Hand, Gift
-} from 'lucide-react';
-import io from 'socket.io-client';
-import { nanoid } from 'nanoid';
-import './join.css';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiSearch } from "react-icons/fi";
+import { MessageCircle, Users, X, Plus, Crown, Coffee, History, Lock, Settings } from 'lucide-react';
+import { toast } from 'react-toastify';
+import io from "socket.io-client";
+import './chatdesign.css';
 
 
 const SERVER_URL =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:5000"
-    : "https://atozservo-backend.onrender.com";
+    import.meta.env.VITE_API_BASE_URL;
 
 const socket = io(SERVER_URL, { transports: ["websocket"] });
+
 interface User {
-  id: string;
-  name: string;
-  isSpeaking: boolean;
-  isOwner: boolean;
-  isMicOn: boolean;
-  isVideoOn: boolean;
-  imageUrl: string;
+    id: string;
+    name: string;
+    isSpeaking: boolean;
+    isOwner: boolean;
+    imageUrl: string;
 }
 
-interface ChatMessage {
-  id: string;
-  senderName: string;
-  message: string;
-  type: 'user_message' | 'system_message';
-  timestamp: number;
+interface Group {
+    id: string;
+    language: string;
+    level: string;
+    topic: string;
+    members: number;
+    users: User[];
 }
 
-const PremiumTalkRoom: React.FC = () => {
-  const navigate = useNavigate();
-  const { groupId } = useParams<{ groupId: string }>();
+interface UserProfileProps {
+    user: User;
+}
 
-  const [users, setUsers] = useState<User[]>([]);
-  const [localUser, setLocalUser] = useState<User | null>(null);
-  const [isMicOn, setIsMicOn] = useState(false);
-  const [isVideoOn, setIsVideoOn] = useState(false);
-  const [showChat, setShowChat] = useState(false);
-  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
-  const [currentMessage, setCurrentMessage] = useState('');
-  const [showVideoConfirmation, setShowVideoConfirmation] = useState(false);
-  const [showMicConfirmation, setShowMicConfirmation] = useState(false);
-  const [mediaAccessError, setMediaAccessError] = useState('');
-  const [handRaised, setHandRaised] = useState(false);
-
-  // Refs
-  const localVideoRef = useRef<HTMLVideoElement | null>(null);
-  const localStreamRef = useRef<MediaStream | null>(null);
-  const audioAnalyserRef = useRef<AnalyserNode | null>(null);
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const speakingIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Utility: add system message
-  const addSystemMessage = (msg: string) => {
-    setChatMessages(prev => [...prev, {
-      id: nanoid(),
-      senderName: 'System',
-      message: msg,
-      type: 'system_message',
-      timestamp: Date.now()
-    }]);
-  };
-
-  // Start mic detection
-  const startSpeakingDetection = (stream: MediaStream) => {
-    const audioContext = audioContextRef.current ||= new (window.AudioContext || (window as any).webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const micSource = audioContext.createMediaStreamSource(stream);
-    micSource.connect(analyser);
-
-    analyser.fftSize = 1024;
-    analyser.smoothingTimeConstant = 0.8;
-    audioAnalyserRef.current = analyser;
-
-    speakingIntervalRef.current && clearInterval(speakingIntervalRef.current);
-
-    speakingIntervalRef.current = setInterval(() => {
-      const data = new Uint8Array(analyser.fftSize);
-      analyser.getByteFrequencyData(data);
-      const avg = data.reduce((a, b) => a + b) / data.length;
-      socket.emit('speaking', { groupId, isSpeaking: avg > 20 });
-    }, 200);
-  };
-
-  // Join room and media setup
-  useEffect(() => {
-    const roomId = groupId || nanoid();
-    if (!groupId) navigate(`/room/${roomId}`, { replace: true });
-
-    const setupMedia = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        stream.getAudioTracks().forEach(t => t.enabled = isMicOn);
-        stream.getVideoTracks().forEach(t => t.enabled = isVideoOn);
-
-        if (localVideoRef.current) localVideoRef.current.srcObject = stream;
-        localStreamRef.current = stream;
-
-        const newUser: User = {
-       id: socket?.id || "unknown-id",
-      name: "User-" + Math.floor(Math.random() * 1000),
-       isSpeaking: false,
-      isOwner: true,
-      isMicOn,
-      isVideoOn,
-      imageUrl: `https://placehold.co/100x100/A7C9F5/ffffff?text=${(socket?.id || "??").substring(0, 2)}`
+const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
+    return (
+        <div className={`user-profile ${user.isSpeaking ? 'speaking-animation' : ''}`}>
+            <img
+                className="user-profile-image"
+                src={user.imageUrl}
+                alt={user.name}
+            />
+            {user.isOwner && (
+                <span className="owner-badge">
+                    Owner
+                </span>
+            )}
+        </div>
+    );
 };
 
-        setLocalUser(newUser);
-        setUsers([newUser]);
-        socket.emit('joinRoom', { groupId: roomId, user: newUser });
-      } catch (err) {
-        console.error(err);
-        setMediaAccessError("Failed to access media devices.");
-        addSystemMessage("Media access failed. Check permissions.");
-      }
+interface GroupCardProps {
+    group: Group;
+    onJoin: (groupId: string) => void;
+}
+
+const GroupCard: React.FC<GroupCardProps> = ({ group, onJoin }) => {
+    const [isJoined, setIsJoined] = useState(false);
+    const handleJoin = () => {
+        setIsJoined(true);
+        onJoin(group.id);
     };
 
-    if (socket.connected) setupMedia();
-    else socket.once('connect', setupMedia);
-
-    // Listeners
-    socket.on('userJoined', (user: User) => {
-      setUsers(prev => prev.some(u => u.id === user.id) ? prev : [...prev, user]);
-      addSystemMessage(`${user.name} joined.`);
-    });
-
-    socket.on('userLeft', (id: string) => {
-      setUsers(prev => prev.filter(u => u.id !== id));
-      addSystemMessage(`User left.`);
-    });
-
-    socket.on('userStatusChange', (userId, status) => {
-      setUsers(prev => prev.map(u => u.id === userId ? { ...u, ...status } : u));
-    });
-
-    socket.on('speaking', (userId: string, isSpeaking: boolean) => {
-      setUsers(prev => prev.map(u => u.id === userId ? { ...u, isSpeaking } : u));
-    });
-
-    socket.on('chatMessage', ({ senderName, message }: { senderName: string, message: string }) => {
-      setChatMessages(prev => [...prev, {
-        id: nanoid(),
-        senderName,
-        message,
-        type: 'user_message',
-        timestamp: Date.now()
-      }]);
-    });
-
-    return () => {
-      localStreamRef.current?.getTracks().forEach(t => t.stop());
-      audioAnalyserRef.current?.disconnect();
-      if (speakingIntervalRef.current) clearInterval(speakingIntervalRef.current);
-
-      socket.emit('leaveRoom', { groupId: roomId });
-      socket.off();
-    };
-  }, []);
-
-  const toggleMic = (confirm = true) => {
-    if (confirm && !isMicOn) return setShowMicConfirmation(true);
-    if (!localStreamRef.current) return;
-
-    const newMic = !isMicOn;
-    setIsMicOn(newMic);
-    localStreamRef.current.getAudioTracks().forEach(t => t.enabled = newMic);
-    setUsers(prev => prev.map(u => u.id === localUser?.id ? { ...u, isMicOn: newMic } : u));
-    socket.emit('userStatusChange', { groupId, status: { isMicOn: newMic } });
-
-    newMic ? startSpeakingDetection(localStreamRef.current) : socket.emit('speaking', { groupId, isSpeaking: false });
-    setShowMicConfirmation(false);
-  };
-
-  const toggleVideo = (confirm = true) => {
-    if (confirm && !isVideoOn) return setShowVideoConfirmation(true);
-    if (!localStreamRef.current) return;
-
-    const newVid = !isVideoOn;
-    setIsVideoOn(newVid);
-    localStreamRef.current.getVideoTracks().forEach(t => t.enabled = newVid);
-    setUsers(prev => prev.map(u => u.id === localUser?.id ? { ...u, isVideoOn: newVid } : u));
-    socket.emit('userStatusChange', { groupId, status: { isVideoOn: newVid } });
-
-    if (localVideoRef.current) localVideoRef.current.srcObject = newVid ? localStreamRef.current : null;
-    setShowVideoConfirmation(false);
-  };
-
-  const leaveRoom = () => navigate('/chat');
-
-  const sendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentMessage.trim() || !localUser) return;
-    socket.emit('sendChatMessage', {
-      groupId,
-      senderId: localUser.id,
-      senderName: localUser.name,
-      message: currentMessage
-    });
-    setCurrentMessage('');
-  };
-
-  const handleConfirmAction = (type: 'mic' | 'video', accept: boolean) => {
-    if (type === 'mic') {
-      setShowMicConfirmation(false);
-      if (accept) toggleMic(false);
-    } else {
-      setShowVideoConfirmation(false);
-      if (accept) toggleVideo(false);
-    }
-  };
-
-  const raiseHand = () => {
-    setHandRaised(!handRaised);
-    addSystemMessage(`${localUser?.name} ${!handRaised ? 'raised' : 'lowered'} their hand.`);
-  };
-
-  return (
-    <div className="premium-talk-room-container">
-      <header className="room-header">
-        <button className="back-button" onClick={leaveRoom}>
-          <CornerDownLeft size={24} />
-        </button>
-        <h1 className="room-title">Group: {groupId}</h1>
-      </header>
-
-      {mediaAccessError && <div className="media-error-message">{mediaAccessError}</div>}
-
-      <div className="users-grid">
-        {users.length > 0 ? users.map(user => (
-          <div key={user.id} className={`user-card ${user.isSpeaking ? 'speaking-animation' : ''}`}>
-            <div className="user-profile-img-wrapper">
-              {user.isVideoOn ? (
-                <video ref={user.id === localUser?.id ? localVideoRef : null} autoPlay playsInline muted={user.id === localUser?.id} />
-              ) : (
-                <img src={user.imageUrl} alt={user.name} className="user-profile-img" />
-              )}
-              {user.isOwner && <span className="owner-badge">Owner</span>}
-              <div className="mic-status-icon">
-                {user.isMicOn ? <Volume2 size={24} /> : <VolumeX size={24} />}
-              </div>
-              {!user.isVideoOn && <div className="video-off-overlay"><VideoOff size={32} /></div>}
-            </div>
-            <h2 className="user-name">{user.name}</h2>
-          </div>
-        )) : <div className="empty-room-placeholder">Waiting for others...</div>}
-      </div>
-
-      <div className="footer-bar">
-        <div className="main-controls">
-          <button onClick={() => toggleMic()} className={`control-button ${isMicOn ? 'active' : ''}`}><Mic /></button>
-          <button onClick={() => toggleVideo()} className={`control-button ${isVideoOn ? 'active' : ''}`}><Video /></button>
-          <button onClick={leaveRoom} className="control-button leave-button"><PhoneOff /></button>
-        </div>
-
-        <button onClick={raiseHand} className="footer-button-small"><Hand /><span>Hand</span></button>
-        <button onClick={() => {}} className="footer-button-small"><Gift /><span>Gift</span></button>
-        <button onClick={() => setShowChat(!showChat)} className="footer-button-small chat-toggle"><MessageSquare /><span>Chat</span></button>
-      </div>
-
-      {(showMicConfirmation || showVideoConfirmation) && (
-        <div className="confirmation-modal-overlay">
-          <div className="confirmation-modal-box">
-            <p>{showMicConfirmation ? 'Turn on Microphone?' : 'Turn on Camera?'}</p>
-            <div>
-              <button onClick={() => handleConfirmAction(showMicConfirmation ? 'mic' : 'video', false)}>Decline</button>
-              <button onClick={() => handleConfirmAction(showMicConfirmation ? 'mic' : 'video', true)}>Accept</button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {showChat && (
-        <div className="chat-window">
-          <div className="chat-messages">
-            {chatMessages.map(msg => (
-              <div key={msg.id} className={`chat-message ${msg.type === 'system_message' ? 'system-message' : (msg.senderName === localUser?.name ? 'self' : 'other')}`}>
-                <div className="message-content">
-                  {msg.type === 'user_message' && <div className="message-sender">{msg.senderName}</div>}
-                  <div className="message-text">{msg.message}</div>
+    return (
+        <div className="group-card">
+            <div className="group-card-header">
+                <div className="group-language-info">
+                    <span className="group-status-dot animate-pulse"></span>
+                    <span>{group.language}</span>
+                    <span className="group-level">({group.level})</span>
                 </div>
-              </div>
-            ))}
-          </div>
-          <form onSubmit={sendMessage} className="chat-input-container">
-            <input type="text" value={currentMessage} onChange={e => setCurrentMessage(e.target.value)} placeholder="Type..." />
-            <button type="submit"><CornerDownLeft /></button>
-          </form>
+                <Settings className="settings-icon" size={20} />
+            </div>
+
+            <div className="group-users-container">
+                {group.users && group.users.length > 0 ? (
+                    group.users.map(user => (
+                        <UserProfile key={user.id} user={user} />
+                    ))
+                ) : (
+                    <div className="empty-group-placeholder">
+                        Empty
+                    </div>
+                )}
+            </div>
+
+            <h4 className="group-topic">{group.topic}</h4>
+            <p className="group-members">Members: {group.members}</p>
+            <button
+                onClick={handleJoin}
+                className={`join-button ${isJoined ? "joined" : "not-joined"}`}
+                disabled={isJoined}
+            >
+                {isJoined ? "Joined!" : "Join and talk now!"}
+            </button>
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
-export default PremiumTalkRoom;
+// --- CreateGroupModal Component ---
+interface CreateGroupModalProps {
+    onClose: () => void;
+    onCreateGroup: (groupData: any) => void;
+}
+
+const languages = [
+    "English", "Hindi", "Telugu", "Tamil", "Kannada", "Malayalam", "Bengali", "Urdu", "Vietnamese", "Indonesian", "Arabic",
+    "French", "Nepali", "Spanish", "Catalan"
+];
+
+const levels = [
+    "Any Level", "Beginner", "Upper Beginner", "Intermediate", "Upper Intermediate", "Advanced", "Upper Advanced", "Native"
+];
+
+const interests = [
+    "Fun Chat", "Language Practice", "Dating"
+];
+
+// ✅ గరిష్ట వ్యక్తుల సంఖ్య 1 నుండి 10 వరకు మార్చబడింది
+const maxPeopleOptions = ["Unlimited", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
+const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGroup }) => {
+    const [customTopic, setCustomTopic] = useState("");
+    const [selectedLanguage, setSelectedLanguage] = useState("");
+    const [selectedLevel, setSelectedLevel] = useState("Any Level");
+    const [selectedInterest, setSelectedInterest] = useState("");
+    const [maxPeople, setMaxPeople] = useState("Unlimited");
+
+    const handleCreate = () => {
+        onCreateGroup({
+            customTopic,
+            selectedLanguage,
+            selectedLevel,
+            selectedInterest,
+            maxPeople,
+        });
+        onClose();
+    };
+
+    return (
+        <div className="modal-overlay">
+            <div className="create-group-modal-box">
+                <button
+                    onClick={onClose}
+                    className="modal-close-button"
+                    aria-label="Close modal"
+                >
+                    <X size={24} />
+                </button>
+
+                <h3 className="create-group-modal-title">Create New Group</h3>
+                
+                <div className="form-grid">
+                    <div>
+                        <label htmlFor="custom-topic" className="form-label">Custom Topic</label>
+                        <input
+                            id="custom-topic"
+                            type="text"
+                            placeholder="e.g., Hobbies, Travel"
+                            value={customTopic}
+                            onChange={(e) => setCustomTopic(e.target.value)}
+                            className="form-input"
+                            aria-label="Custom topic input"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="max-people" className="form-label">Maximum People</label>
+                        <div className="form-select-container">
+                            <select
+                                id="max-people"
+                                value={maxPeople}
+                                onChange={(e) => setMaxPeople(e.target.value)}
+                                className="form-select"
+                                aria-label="Select maximum people"
+                            >
+                                {maxPeopleOptions.map(option => (
+                                    <option key={option} value={option}>{option}</option>
+                                ))}
+                            </select>
+                            <div className="select-arrow">
+                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="form-grid">
+                    <div>
+                        <label htmlFor="language" className="form-label">Language</label>
+                        <div className="form-select-container">
+                            <select
+                                id="language"
+                                value={selectedLanguage}
+                                onChange={(e) => setSelectedLanguage(e.target.value)}
+                                className="form-select"
+                                aria-label="Select language"
+                            >
+                                <option value="">Select a language</option>
+                                {languages.map(lang => (
+                                    <option key={lang} value={lang}>{lang}</option>
+                                ))}
+                            </select>
+                            <div className="select-arrow">
+                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="level" className="form-label">Level</label>
+                        <div className="form-select-container">
+                            <select
+                                id="level"
+                                value={selectedLevel}
+                                onChange={(e) => setSelectedLevel(e.target.value)}
+                                className="form-select"
+                                aria-label="Select level"
+                            >
+                                {levels.map(level => (
+                                    <option key={level} value={level}>{level}</option>
+                                ))}
+                            </select>
+                            <div className="select-arrow">
+                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mb-8">
+                    <label className="form-label">Group Interest</label>
+                    <div className="interest-buttons-container">
+                        {interests.map(interest => (
+                            <button
+                                key={interest}
+                                onClick={() => setSelectedInterest(interest)}
+                                className={`interest-button ${selectedInterest === interest ? "selected" : ""}`}
+                            >
+                                {interest}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="modal-buttons-container">
+                    <button
+                        onClick={onClose}
+                        className="modal-cancel-button"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        onClick={handleCreate}
+                        className="modal-create-button"
+                    >
+                        Create Group
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const ChatDesign: React.FC = () => {
+    const navigate = useNavigate();
+    const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+    const [activeLanguage, setActiveLanguage] = useState("All");
+    const [groups, setGroups] = useState<Group[]>([]);
+
+    const handleCreateGroup = (groupData: any) => {
+        console.log("Attempting to create group with data:", groupData);
+        socket.emit('createGroup', groupData);
+        // ✅ toast message is removed as per user request
+        // toast.info("Group creation initiated! Waiting for other users to join.");
+    };
+
+    const handleJoinGroup = (groupId: string) => {
+        navigate(`/room/${groupId}`);
+    };
+
+    // ✅ ఈ కోడ్ ఇప్పుడు groups state మారినప్పుడల్లా రన్ అవుతుంది
+    useEffect(() => {
+        console.log("ChatDesign useEffect running. Setting up listeners.");
+        
+        socket.emit('getGroups');
+        
+        socket.on('groupsList', (initialGroups: Group[]) => {
+            console.log("Received initial groups list:", initialGroups);
+            setGroups(initialGroups);
+        });
+
+        socket.on('newGroupCreated', (group: Group) => {
+            console.log("New group created event received:", group);
+            setGroups(prevGroups => {
+                if (!prevGroups.some(g => g.id === group.id)) {
+                    return [...prevGroups, group];
+                }
+                return prevGroups;
+            });
+        });
+        
+        socket.on('groupDeleted', (groupId: string) => {
+            console.log("Group deleted event received:", groupId);
+            setGroups(prevGroups => prevGroups.filter(g => g.id !== groupId));
+        });
+
+        return () => {
+            console.log("ChatDesign useEffect cleanup.");
+            socket.off('groupsList');
+            socket.off('newGroupCreated');
+            socket.off('groupDeleted');
+        };
+    }, []); // ✅ ఇక్కడ డిపెండెన్సీ అరే ఖాళీగా ఉంది
+
+    // ✅ groups state మారినప్పుడల్లా filteredGroupsను తిరిగి లెక్కించాలి
+    const filteredGroups = activeLanguage === "All"
+        ? groups
+        : groups.filter(group => group.language === activeLanguage);
+
+    // Calculate counts for language tabs
+    const languageCounts: { [key: string]: number } = {};
+    groups.forEach(group => {
+        languageCounts[group.language] = (languageCounts[group.language] || 0) + 1;
+    });
+
+    const languageTabs = [
+        { name: "All", count: groups.length },
+        { name: "English", count: languageCounts["English"] || 0 },
+        { name: "Hindi", count: languageCounts["Hindi"] || 0 },
+        { name: "Telugu", count: languageCounts["Telugu"] || 0 },
+        { name: "Tamil", count: languageCounts["Tamil"] || 0 },
+        { name: "Kannada", count: languageCounts["Kannada"] || 0 },
+        { name: "Bengali", count: languageCounts["Bengali"] || 0 },
+        { name: "Urdu", count: languageCounts["Urdu"] || 0 },
+        { name: "Indonesian", count: languageCounts["Indonesian"] || 0 },
+        { name: "Arabic", count: languageCounts["Arabic"] || 0 },
+        { name: "French", count: languageCounts["French"] || 0 },
+        { name: "Spanish", count: languageCounts["Spanish"] || 0 },
+        { name: "Vietnamese", count: languageCounts["Vietnamese"] || 0 },
+    ];
+
+    return (
+        <div className="chat-container">
+            
+            {/* Header Section */}
+            <header className="header-section">
+                <div className="header-brand">
+                    <h2 className="app-title" tabIndex={0}>Free4Talk</h2>
+                    <div className="mobile-search-button">
+                        <button className="search-icon-button">
+                            <FiSearch size={24} />
+                        </button>
+                    </div>
+                </div>
+
+                <h1 className="app-subtitle">Language Practice Community</h1>
+                
+                <div className="header-buttons-container scrollbar-hide">
+                    <button
+                        onClick={() => setShowCreateGroupModal(true)}
+                        className="header-button create-group-button"
+                        aria-label="Create a new group"
+                    >
+                        <Plus size={18} />
+                        Create a new group
+                    </button>
+                    <button
+                        onClick={() => toast.info("Thanks for your support! Buy me a coffee feature coming soon.")}
+                        className="header-button buy-coffee-button"
+                        aria-label="Buy me a coffee"
+                    >
+                        <Coffee size={18} />
+                        Buy me a coffee
+                    </button>
+                    <button className="header-button app-button" aria-label="Free4Talk App">
+                        <Crown size={16} /> Free4Talk APP
+                    </button>
+                    <button className="header-button privacy-button" aria-label="Privacy Policy">
+                        <Lock size={16} /> Privacy Policy
+                    </button>
+                </div>
+            </header>
+
+            {/* Search and Filters Section */}
+            <section className="search-section">
+                <div className="search-bar-container">
+                    <FiSearch className="search-icon" aria-hidden="true" />
+                    <input
+                        type="search"
+                        placeholder="Search for Language, Level, Topic. Username. Mic On, Mic Off. Mic allow, Full, Empty, Crowded. Unlimited..."
+                        className="search-input"
+                        aria-label="Search for groups or users"
+                    />
+                </div>
+            </section>
+
+            {/* Language Filter Tabs */}
+            <section className="language-tabs-section scrollbar-hide">
+                <div className="language-tabs-container">
+                    {languageTabs.map(tab => (
+                        <button
+                            key={tab.name}
+                            onClick={() => setActiveLanguage(tab.name)}
+                            className={`language-tab-button ${activeLanguage === tab.name ? "active" : ""}`}
+                            aria-pressed={activeLanguage === tab.name}
+                        >
+                            {tab.name} ({tab.count})
+                        </button>
+                    ))}
+                </div>
+            </section>
+
+            {/* Group List Section */}
+            <main className="group-list-section scrollbar-hide">
+                {filteredGroups.length > 0 ? (
+                    filteredGroups.map(group => (
+                        <GroupCard key={group.id} group={group} onJoin={handleJoinGroup} />
+                    ))
+                ) : (
+                    <p className="no-groups-message">No groups found for this language.</p>
+                )}
+            </main>
+
+            {/* Custom Alert Dialog is removed */}
+            {/* {alertMessage && <AlertDialog message={alertMessage} onClose={closeAlert} />} */}
+
+            {/* Create Group Modal */}
+            {showCreateGroupModal && (
+                <CreateGroupModal
+                    onClose={() => setShowCreateGroupModal(false)}
+                    onCreateGroup={handleCreateGroup}
+                />
+            )}
+            
+            {/* Bottom Navigation Bar */}
+            <nav className="bottom-nav-bar" role="navigation" aria-label="Main navigation">
+                <button
+                    className="nav-item"
+                >
+                    <MessageCircle size={20} aria-hidden="true" />
+                    <span>Chats</span>
+                </button>
+
+                <button
+                    className="find-partner-button"
+                    onClick={() => navigate("/find-partner-options")}
+                    aria-label="Find a partner"
+                >
+                    <Users size={24} aria-hidden="true" />
+                    <span className="sr-only">Partner</span>
+                </button>
+                <button
+                    className="nav-item"
+                    onClick={() => navigate("/history")}
+                    aria-label="Chat History"
+                >
+                    <History size={20} aria-hidden="true" />
+                    <span>History</span>
+                </button>
+            </nav>
+        </div>
+    );
+};
+
+export default ChatDesign;

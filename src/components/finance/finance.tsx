@@ -4,10 +4,10 @@ import './finance.css';
 
 const Finance: React.FC = () => {
   const navigate = useNavigate();
-  const [showTooltip, setShowTooltip] = useState(false); // టూల్టిప్ కనిపించడానికి స్టేట్
+  const [showTooltip, setShowTooltip] = useState(false); 
 
   const handleLoanClick = () => {
-    navigate('/money-lending'); // కొత్త పేజీకి నావిగేట్ చేస్తుంది
+    navigate('/money-lending'); 
   };
 
   const handleMouseEnter = () => {
@@ -19,7 +19,7 @@ const Finance: React.FC = () => {
   };
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault(); // డిఫాల్ట్ బ్రౌజర్ టూల్టిప్ ను నివారించడానికి
+    e.preventDefault(); 
     setShowTooltip(true);
   };
 

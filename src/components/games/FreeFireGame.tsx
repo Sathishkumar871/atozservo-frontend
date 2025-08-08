@@ -1,5 +1,4 @@
-// FreeFire.jsx లో ఎటువంటి మార్పులు అవసరం లేదు.
-// పాత కోడ్ ను అలాగే ఉంచుకోవచ్చు.
+
 import React, { useState, useEffect } from 'react';
 import './FreeFire.css';
 
@@ -9,7 +8,7 @@ const FreeFire: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowDetails(true);
-    }, 1500); // యానిమేషన్ తర్వాత వివరాలు కనిపించేలా 1.5 సెకన్లు వెయిట్ చేయండి
+    }, 1500); 
 
     return () => clearTimeout(timer);
   }, []);

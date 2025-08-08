@@ -11,55 +11,64 @@ import 'leaflet/dist/leaflet.css';
 // Fix Leaflet default icon paths to ensure markers display correctly
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+  iconRetinaUrl: '[https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png](https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png)',
+  iconUrl: '[https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png](https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png)',
+  shadowUrl: '[https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png](https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png)',
 });
 
 // Interface for component props
 interface PostServiceFormProps {
   onClose: () => void;
   openLogin: () => void;
-  user: any; // Ideally, define a proper interface for your user object (e.g., { _id: string; /* other user props */ })
+  user: any; 
 }
 
-// Suggestions for service names
+// ✅ Suggestions for service names and their categories
 const serviceNameSuggestions = [
-  'Plumber', 'Electrician', 'Cleaner', 'Carpenter', 'Painter',
-  'AC Repair', 'Appliance Repair', 'Pest Control', 'Gardener', 'Home Renovation',
-  'Tutor', 'Yoga Instructor', 'Photographer', 'Web Developer', 'Content Writer'
+  { name: 'Plumber', category: 'Plumbing' },
+  { name: 'Electrician', category: 'Electrical' },
+  { name: 'Cleaner', category: 'Cleaning' },
+  { name: 'Carpenter', category: 'Carpentry' },
+  { name: 'Painter', category: 'Painting' },
+  { name: 'AC Repair', category: 'Appliance Repair' },
+  { name: 'Appliance Repair', category: 'Appliance Repair' },
+  { name: 'Pest Control', category: 'Pest Control' },
+  { name: 'Gardener', category: 'Gardening' },
+  { name: 'Home Renovation', category: 'Renovation' },
+  { name: 'Tutor', category: 'Education' },
+  { name: 'Yoga Instructor', category: 'Health & Wellness' },
+  { name: 'Photographer', category: 'Photography' },
+  { name: 'Web Developer', category: 'IT & Digital' },
+  { name: 'Content Writer', category: 'Writing' }
 ];
 
 const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, user }) => {
   // State variables for form fields
   const [serviceName, setServiceName] = useState('');
   const [description, setDescription] = useState('');
-  const [experience, setExperience] = useState(''); // Stored as string from input, converted to number before sending
+  const [experience, setExperience] = useState('');
   const [type, setType] = useState<'service' | 'owner'>('service');
-  const [price, setPrice] = useState(''); // Stored as string from input, converted to number before sending
+  const [price, setPrice] = useState('');
   const [category, setCategory] = useState('');
   const [features, setFeatures] = useState('');
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [address, setAddress] = useState<string | null>(null);
   const [searchTermService, setSearchTermService] = useState('');
   const [selectedServiceName, setSelectedServiceName] = useState('');
-  const [uploadedImages, setUploadedImages] = useState<string[]>([]); // Array to hold Cloudinary URLs
-  const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]); // Refs for hidden file inputs
-
-  // Backend API base URL from environment variables
+  const [uploadedImages, setUploadedImages] = useState<string[]>(new Array(5).fill(null));
+  const fileInputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  
   const backend = import.meta.env.VITE_API_BASE_URL;
 
-  // Function to get user's current location
   const handleLocation = async () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          setLocation({ lat, lng }); // Set location state
+          setLocation({ lat, lng });
 
           try {
-            // Reverse geocode to get human-readable address
             const response = await axios.get(
               `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`
             );
@@ -68,7 +77,7 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
             const pincode = result.address.postcode || '';
             const suburb = result.address.suburb || result.address.village || result.address.town || '';
             const finalAddress = `${displayName} (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
-            setAddress(finalAddress); // Set address state
+            setAddress(finalAddress);
             toast.success(`📍 Location: ${suburb} - ${pincode}`);
           } catch (error) {
             console.error("Reverse geocoding failed:", error);
@@ -86,14 +95,12 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
       toast.error("❌ Geolocation not supported by your browser.");
     }
   };
-
- 
+  
   const clearLocation = () => {
     setLocation(null);
     setAddress(null);
     toast.info("📍 Location cleared.");
   };
-
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,19 +110,31 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
       openLogin();
       return;
     }
-
+    
+    // ✅ కేవలం 10 పదాలు మాత్రమే ఉండేలా డిస్క్రిప్షన్ చెక్
+    if (description.split(' ').length > 10) {
+      toast.error("❌ Description must be a maximum of 10 words.");
+      return;
+    }
+    
+    // ✅ కనీసం 2 ఫోటోలు ఉన్నాయో లేదో చెక్
+    const validImages = uploadedImages.filter(img => img !== null);
+    if (validImages.length < 2) {
+        toast.error("❌ Please upload at least two images for your service.");
+        return;
+    }
+    
     const postData = {
       name: serviceName,
       category,
       description,
-      
       experience: experience ? parseInt(experience, 10) : 0,
-      price: price ? parseFloat(price) : 0,                  
+      price: price ? parseFloat(price) : 0,                  
       features,
       type,
       location, 
       address, 
-      images: uploadedImages, 
+      images: validImages, 
       userId: user._id, 
     };
 
@@ -125,6 +144,7 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
     try {
       await axios.post(`${backend}/api/services`, postData);
       toast.success('✅ Service Posted Successfully!');
+      toast.warn('⚠️ Remember to provide fast service, or your account may be blocked.');
       onClose();
     } catch (err: any) {
       console.error('❌ Failed to Post Service:', err);
@@ -136,7 +156,7 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
         } else if (err.response.data.message) {
           toast.error(`❌ Failed to Post Service: ${err.response.data.message}`);
         } else {
-          toast.error('❌ Failed to Post Service: Check console for details');
+          toast.error('❌ Failed to Post Service: An unknown error occurred');
         }
       } else {
         toast.error('❌ Failed to Post Service: An unknown error occurred');
@@ -147,6 +167,12 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const file = event.target.files?.[0];
     if (!file) return;
+
+    // ✅ మొదటి ఫోటో లైవ్ ఫోటో అని నిర్ధారించుకోవడం
+    if (index === 0 && file.size === 0) {
+        toast.error("❌ First image must be a live photo.");
+        return;
+    }
 
     const formData = new FormData();
     formData.append("image", file);
@@ -176,14 +202,16 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
 
   const filteredServiceSuggestions = searchTermService
     ? serviceNameSuggestions.filter(service =>
-        service.toLowerCase().includes(searchTermService.toLowerCase())
+        service.name.toLowerCase().includes(searchTermService.toLowerCase())
       )
     : [];
 
-  const handleServiceSuggestionClick = (service: string) => {
-    setSelectedServiceName(service);
-    setServiceName(service);
-    setSearchTermService(service);
+  // ✅ సర్వీస్ పేరును క్లిక్ చేసినప్పుడు, దానికి సంబంధించిన కేటగిరీని కూడా ఫిల్ చేస్తుంది
+  const handleServiceSuggestionClick = (service: { name: string, category: string }) => {
+    setSelectedServiceName(service.name);
+    setServiceName(service.name);
+    setSearchTermService(service.name);
+    setCategory(service.category); // ✅ కేటగిరీని ఆటోమేటిక్‌గా ఫిల్ చేస్తుంది
   };
 
   return (
@@ -210,7 +238,7 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
                 ) : (
                   <div className="upload-placeholder">
                     <FiPlusCircle className="upload-icon" />
-                    <p>Add Image</p>
+                    <p>{i === 0 ? 'Add Live Photo' : 'Add Service Photo'}</p>
                   </div>
                 )}
                 <input
@@ -250,7 +278,7 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
                     className="suggestion-item-post-form"
                     onClick={() => handleServiceSuggestionClick(service)}
                   >
-                    {service}
+                    {service.name}
                   </div>
                 ))}
               </div>
@@ -287,7 +315,17 @@ const PostServiceForm: React.FC<PostServiceFormProps> = ({ onClose, openLogin, u
             <input
               type="number"
               value={experience}
-              onChange={(e) => setExperience(e.target.value)}
+              onChange={(e) => {
+                  setExperience(e.target.value);
+                  // ✅ ఎక్స్‌పీరియన్స్ ఆధారంగా కీ ఫీచర్లను సూచించడం
+                  if (parseInt(e.target.value) >= 5) {
+                      setFeatures('5+ years of experience, certified professional');
+                  } else if (parseInt(e.target.value) >= 2) {
+                      setFeatures('2+ years of experience, guaranteed service');
+                  } else {
+                      setFeatures('');
+                  }
+              }}
               placeholder="e.g., 2"
               min="0"
             />

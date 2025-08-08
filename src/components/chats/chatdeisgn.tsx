@@ -1,36 +1,27 @@
-// src/components/ChatDesign.tsx
-
-"use client";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { MessageCircle, Users, X, Plus, Crown, Coffee, History, Lock, Settings } from 'lucide-react';
+import { toast } from 'react-toastify';
 import io from "socket.io-client";
 import './chatdesign.css';
 
-
-
-const SERVER_URL =
-  import.meta.env.MODE === "development"
-    ? "http://localhost:5000"
-    : "https://atozservo-backend.onrender.com";
+// SERVER_URL ని మీ Render బ్యాకెండ్ URL తో మార్చాలి
+const SERVER_URL = "https://atozservo-backend.onrender.com";
 
 const socket = io(SERVER_URL, { transports: ["websocket"] });
 
-// Mock data is now removed for dynamic group creation
-// const initialMockGroups = [];
-
 // --- Group Card Component ---
 interface User {
-  id: number;
-  name: string;
-  isSpeaking: boolean;
-  isOwner: boolean;
-  imageUrl: string;
+    id: string;
+    name: string;
+    isSpeaking: boolean;
+    isOwner: boolean;
+    imageUrl: string;
 }
 
 interface Group {
-    id: number;
+    id: string;
     language: string;
     level: string;
     topic: string;
@@ -61,7 +52,7 @@ const UserProfile: React.FC<UserProfileProps> = ({ user }) => {
 
 interface GroupCardProps {
     group: Group;
-    onJoin: (groupId: number) => void;
+    onJoin: (groupId: string) => void;
 }
 
 const GroupCard: React.FC<GroupCardProps> = ({ group, onJoin }) => {
@@ -107,29 +98,6 @@ const GroupCard: React.FC<GroupCardProps> = ({ group, onJoin }) => {
     );
 };
 
-
-// --- AlertDialog Component ---
-interface AlertDialogProps {
-    message: string;
-    onClose: () => void;
-}
-
-const AlertDialog: React.FC<AlertDialogProps> = ({ message, onClose }) => {
-    return (
-        <div className="modal-overlay">
-            <div className="alert-dialog-box">
-                <p className="alert-dialog-message">{message}</p>
-                <button
-                    onClick={onClose}
-                    className="alert-dialog-button"
-                >
-                    OK
-                </button>
-            </div>
-        </div>
-    );
-};
-
 // --- CreateGroupModal Component ---
 interface CreateGroupModalProps {
     onClose: () => void;
@@ -149,7 +117,7 @@ const interests = [
     "Fun Chat", "Language Practice", "Dating"
 ];
 
-const maxPeopleOptions = ["Unlimited", "2", "3", "4", "5", "10", "20"];
+const maxPeopleOptions = ["Unlimited", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGroup }) => {
     const [customTopic, setCustomTopic] = useState("");
@@ -158,8 +126,14 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGr
     const [selectedInterest, setSelectedInterest] = useState("");
     const [maxPeople, setMaxPeople] = useState("Unlimited");
 
+    const generateRandomId = () => {
+        return Math.random().toString(36).substring(2, 8);
+    };
+
     const handleCreate = () => {
+        const newGroupId = generateRandomId();
         onCreateGroup({
+            id: newGroupId, // <<-- ఈ మార్పు ఇప్పుడు కొత్త ఐడీని బ్యాకెండ్‌కు పంపుతుంది
             customTopic,
             selectedLanguage,
             selectedLevel,
@@ -181,7 +155,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGr
                 </button>
 
                 <h3 className="create-group-modal-title">Create New Group</h3>
-                
+
                 <div className="form-grid">
                     <div>
                         <label htmlFor="custom-topic" className="form-label">Custom Topic</label>
@@ -210,7 +184,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGr
                                 ))}
                             </select>
                             <div className="select-arrow">
-                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                             </div>
                         </div>
                     </div>
@@ -233,7 +207,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGr
                                 ))}
                             </select>
                             <div className="select-arrow">
-                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                             </div>
                         </div>
                     </div>
@@ -252,7 +226,7 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGr
                                 ))}
                             </select>
                             <div className="select-arrow">
-                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                             </div>
                         </div>
                     </div>
@@ -294,36 +268,24 @@ const CreateGroupModal: React.FC<CreateGroupModalProps> = ({ onClose, onCreateGr
 
 const ChatDesign: React.FC = () => {
     const navigate = useNavigate();
-    const [alertMessage, setAlertMessage] = useState<string | null>(null);
     const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
     const [activeLanguage, setActiveLanguage] = useState("All");
     const [groups, setGroups] = useState<Group[]>([]);
 
-    const showAlert = (message: string) => {
-        setAlertMessage(message);
-    };
-
-    const closeAlert = () => {
-        setAlertMessage(null);
-    };
-
     const handleCreateGroup = (groupData: any) => {
         console.log("Attempting to create group with data:", groupData);
-        // The backend will generate the ID, so we don't need it here
         socket.emit('createGroup', groupData);
-        showAlert("Group creation initiated! Waiting for other users to join.");
     };
 
-    const handleJoinGroup = (groupId: number) => {
+    const handleJoinGroup = (groupId: string) => {
         navigate(`/room/${groupId}`);
     };
 
     useEffect(() => {
         console.log("ChatDesign useEffect running. Setting up listeners.");
-        
-        // This is the new logic to fetch initial groups from the server
+
         socket.emit('getGroups');
-        
+
         socket.on('groupsList', (initialGroups: Group[]) => {
             console.log("Received initial groups list:", initialGroups);
             setGroups(initialGroups);
@@ -337,9 +299,10 @@ const ChatDesign: React.FC = () => {
                 }
                 return prevGroups;
             });
+            toast.success(`కొత్త గ్రూప్ '${group.topic}' క్రియేట్ అయింది!`);
         });
-        
-        socket.on('groupDeleted', (groupId: number) => {
+
+        socket.on('groupDeleted', (groupId: string) => {
             console.log("Group deleted event received:", groupId);
             setGroups(prevGroups => prevGroups.filter(g => g.id !== groupId));
         });
@@ -352,7 +315,10 @@ const ChatDesign: React.FC = () => {
         };
     }, []);
 
-    // Calculate counts for language tabs
+    const filteredGroups = activeLanguage === "All"
+        ? groups
+        : groups.filter(group => group.language === activeLanguage);
+
     const languageCounts: { [key: string]: number } = {};
     groups.forEach(group => {
         languageCounts[group.language] = (languageCounts[group.language] || 0) + 1;
@@ -363,8 +329,8 @@ const ChatDesign: React.FC = () => {
         { name: "English", count: languageCounts["English"] || 0 },
         { name: "Hindi", count: languageCounts["Hindi"] || 0 },
         { name: "Telugu", count: languageCounts["Telugu"] || 0 },
-        { name: "Kannada", count: languageCounts["Kannada"] || 0 },
         { name: "Tamil", count: languageCounts["Tamil"] || 0 },
+        { name: "Kannada", count: languageCounts["Kannada"] || 0 },
         { name: "Bengali", count: languageCounts["Bengali"] || 0 },
         { name: "Urdu", count: languageCounts["Urdu"] || 0 },
         { name: "Indonesian", count: languageCounts["Indonesian"] || 0 },
@@ -374,13 +340,9 @@ const ChatDesign: React.FC = () => {
         { name: "Vietnamese", count: languageCounts["Vietnamese"] || 0 },
     ];
 
-    const filteredGroups = activeLanguage === "All"
-        ? groups
-        : groups.filter(group => group.language === activeLanguage);
-
     return (
         <div className="chat-container">
-            
+
             {/* Header Section */}
             <header className="header-section">
                 <div className="header-brand">
@@ -393,7 +355,7 @@ const ChatDesign: React.FC = () => {
                 </div>
 
                 <h1 className="app-subtitle">Language Practice Community</h1>
-                
+
                 <div className="header-buttons-container scrollbar-hide">
                     <button
                         onClick={() => setShowCreateGroupModal(true)}
@@ -404,7 +366,7 @@ const ChatDesign: React.FC = () => {
                         Create a new group
                     </button>
                     <button
-                        onClick={() => showAlert("Thanks for your support! Buy me a coffee feature coming soon.")}
+                        onClick={() => toast.info("Thanks for your support! Buy me a coffee feature coming soon.")}
                         className="header-button buy-coffee-button"
                         aria-label="Buy me a coffee"
                     >
@@ -460,9 +422,6 @@ const ChatDesign: React.FC = () => {
                 )}
             </main>
 
-            {/* Custom Alert Dialog */}
-            {alertMessage && <AlertDialog message={alertMessage} onClose={closeAlert} />}
-
             {/* Create Group Modal */}
             {showCreateGroupModal && (
                 <CreateGroupModal
@@ -470,7 +429,7 @@ const ChatDesign: React.FC = () => {
                     onCreateGroup={handleCreateGroup}
                 />
             )}
-            
+
             {/* Bottom Navigation Bar */}
             <nav className="bottom-nav-bar" role="navigation" aria-label="Main navigation">
                 <button
