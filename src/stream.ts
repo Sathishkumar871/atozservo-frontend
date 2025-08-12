@@ -1,0 +1,1 @@
+export let globalStream: MediaStream | null = null;

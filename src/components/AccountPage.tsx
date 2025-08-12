@@ -17,7 +17,7 @@ interface AccountPageProps {
     [key: string]: any;
   };
   setUser: React.Dispatch<React.SetStateAction<any>>;
-  // ✅ App.tsx nundi onLoginClick prop vasthundi, so ikkada define cheyyali
+  
   onLoginClick: () => void;
 }
 
@@ -25,13 +25,13 @@ const AccountPage: React.FC<AccountPageProps> = ({ user, setUser, onLoginClick }
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  // 🔄 Fetch user data from the backend on component mount
+  
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem('token');
         if (!token) {
-          onLoginClick(); // ✅ navigate('/login') ki badulu ee prop call cheyyali
+          onLoginClick(); 
           return;
         }
 
@@ -52,29 +52,29 @@ const AccountPage: React.FC<AccountPageProps> = ({ user, setUser, onLoginClick }
       }
     };
 
-    // user prop null ga unte matrame fetch cheyyali
+   
     if (!user) { 
       fetchUser();
     }
-  }, [navigate, user, setUser, onLoginClick]); // ✅ dependencies lo onLoginClick add cheyyadam better
+  }, [navigate, user, setUser, onLoginClick]); 
 
-  // 🔄 Handle image upload to the backend
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
 
-    // Create a local preview
+   
     const imageUrl = URL.createObjectURL(file);
     setProfileImage(imageUrl);
 
     try {
-      // 🚀 Create FormData to send the file to the server
+
       const formData = new FormData();
       formData.append('profileImage', file);
       
       const token = localStorage.getItem('token');
       
-      // 💡 Assuming you have a backend route to handle profile image uploads
+     
       const response = await axios.post('/api/user/upload-image', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -82,16 +82,16 @@ const AccountPage: React.FC<AccountPageProps> = ({ user, setUser, onLoginClick }
         }
       });
 
-      // 🔄 Update the state with the new image URL from the server
+   
       const updatedUser = { ...user, profileImage: response.data.imageUrl };
       setUser(updatedUser);
-      setProfileImage(response.data.imageUrl); // Update state with the final URL from Cloudinary
+      setProfileImage(response.data.imageUrl); 
       alert('Profile image updated successfully!');
       
     } catch (error) {
       console.error('Image upload failed:', error);
       alert('Failed to upload image.');
-      // Revert to the original image on error
+ 
       if (user?.profileImage) {
           setProfileImage(user.profileImage);
       } else {

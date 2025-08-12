@@ -42,7 +42,7 @@ const LoginPanel: React.FC<Props> = ({ onClose, onLogin }) => {
       const token = res.data.token;
       localStorage.setItem("token", token);
 
-      // Generate & store deviceId (if not already)
+     
       let deviceId = localStorage.getItem("deviceId");
       if (!deviceId) {
         deviceId = nanoid();

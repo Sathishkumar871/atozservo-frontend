@@ -1,12 +1,28 @@
-/* 🔹 Bottom Navigation Container */
+/* Container for the entire app to simulate a full screen mobile view */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f0f4f8; 
+}
+
+.bottom-nav-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 100vh;
+}
+
+
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 20px;
   right: 20px;
-  background: #ffffff;
-  border-top: 1px solid #e0e0e0;
-   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.09);
+  background: rgba(0, 0, 0, 0.75); 
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 20px 20px 0 0;
   animation: navDrop 0.5s ease forwards;
   display: flex;
   justify-content: space-around;
@@ -20,23 +36,36 @@
   100% { transform: translateY(0); opacity: 1; }
 }
 
-/* 🔹 Nav Item Styling */
 .nav-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #555;
+  color: rgba(255, 255, 255, 0.5); 
   cursor: pointer;
-  transition: color 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s ease-in-out;
+  position: relative;
 }
 
 .nav-item:hover {
-  color: #007bff;
-  transform: scale(1.07);
+  color: #ffffff;
+  transform: translateY(-5px);
 }
 
 .nav-item.active {
-  color: #007bff;
+  color: #ffffff;
+  transform: translateY(-5px);
+}
+
+.nav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25px;
+  height: 3px;
+  background-color: #007bff;
+  border-radius: 2px;
 }
 
 .icon {
@@ -49,7 +78,7 @@
   margin-top: 4px;
 }
 
-/* 🔹 Post Button Styling */
+
 .post-button-wrapper {
   position: relative;
   margin-top: -35px;
@@ -91,7 +120,7 @@
   filter: drop-shadow(0 0 4px rgba(255,255,255,0.6));
 }
 
-/* 🔹 Animations */
+
 @keyframes pulse {
   0%, 100% { box-shadow: 0 0 14px rgba(0, 123, 255, 0.6); }
   50% { box-shadow: 0 0 25px rgba(0, 123, 255, 0.9); }
@@ -107,7 +136,7 @@
   50% { background-position: 100% 50%; }
 }
 
-/* 🔹 Mobile Responsiveness */
+
 @media (max-width: 600px) {
   .bottom-nav { height: 60px; }
   .icon { font-size: 22px; }
@@ -116,7 +145,6 @@
   .post-icon { font-size: 28px; }
 }
 
-/* 🔹 Larger Screens */
 @media (min-width: 1024px) {
   .bottom-nav { height: 70px; }
   .icon { font-size: 26px; }

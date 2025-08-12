@@ -1,116 +1,413 @@
 /* MoneyLending.css */
 
-.lending-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #1a1a1a;
-  padding: 20px;
+/* Reset some basics */
+* {
   box-sizing: border-box;
 }
 
-.lending-wrapper {
-  background-color: #2b2b2b;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  color: #333;
+  
+}
+
+/* Container */
+.lending-container {
+  max-width: 900px;
+  margin: 20px auto 40px;
+  padding: 0 20px 40px;
+}
+
+/* Header background with overlay */
+.header-bg {
+  position: relative;
+  background: linear-gradient(135deg, #3a8dff, #0050ef);
   color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
-  padding: 40px;
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
+  padding: 40px 20px;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 8px 20px rgb(0 0 0 / 0.1);
 }
 
-.lending-title {
-  font-size: 2em;
-  font-weight: bold;
-  color: #ff8c00;
-  margin-bottom: 10px;
+.header-overlay {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.lending-subtitle {
-  font-size: 1em;
-  color: #aaa;
-  margin-bottom: 25px;
-}
-
-.lending-form {
+.language-switcher {
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 15px;
 }
 
-.form-group {
-  text-align: left;
-}
-
-.form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #e5e5e5;
-}
-
-.form-input,
-.form-input-file {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #555;
-  border-radius: 8px;
-  background-color: #3a3a3a;
+.language-switcher button {
+  background: transparent;
+  border: 2px solid rgba(255,255,255,0.7);
   color: #fff;
-  font-size: 1em;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.form-input:focus {
-  border-color: #ff8c00;
-}
-
-.form-input-file {
-  color: transparent;
-  text-align: right;
-}
-
-.form-input-file::-webkit-file-upload-button {
-  visibility: hidden;
-}
-
-.form-input-file::before {
-  content: 'Choose Photos';
-  color: #fff;
-  background-color: #ff8c00;
-  display: inline-block;
-  padding: 10px 15px;
-  outline: none;
-  white-space: nowrap;
-  cursor: pointer;
-  font-weight: 700;
+  padding: 6px 14px;
   border-radius: 5px;
-  text-align: center;
- 
-}
-
-.form-input-file:hover::before {
-  background-color: #e67300;
-}
-
-.send-whatsapp-btn {
-  width: 100%;
-  padding: 15px;
-  background-color: #25d366; /* WhatsApp Green */
-  color: #fff;
-  border: none;
-  border-radius: 50px;
-  font-size: 1.2em;
-  font-weight: bold;
   cursor: pointer;
+  font-weight: 600;
   transition: all 0.3s ease;
 }
 
-.send-whatsapp-btn:hover {
-  background-color: #128c7e;
-  transform: translateY(-3px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+.language-switcher button.active,
+.language-switcher button:hover {
+  background: #fff;
+  color: #0050ef;
+  border-color: #fff;
+}
+
+.header-text-content h1.lending-title {
+  margin: 0 0 8px;
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.header-text-content p.lending-subtitle {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+/* Card */
+.lending-card {
+  background-color: #fff;
+  border-radius: 0 0 12px 12px;
+  padding: 30px 25px 40px;
+  box-shadow: 0 10px 25px rgb(0 0 0 / 0.08);
+}
+
+/* Trust Banner */
+.trust-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #d1e7dd;
+  color: #0f5132;
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 25px;
+}
+
+.banner-icon {
+  font-size: 1.5rem;
+  color: #198754;
+}
+
+/* Confirmation message */
+.confirmation-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #fff3cd;
+  color: #664d03;
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-bottom: 25px;
+  font-size: 1.1rem;
+}
+
+.confirmation-message svg {
+  color: #ffca2c;
+}
+
+/* Form Sections */
+.form-group-section {
+  margin-bottom: 25px;
+}
+
+.form-group-section h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #0050ef;
+  display: inline-block;
+  padding-bottom: 3px;
+  color: #0050ef;
+}
+
+/* Fade-in effect */
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
+}
+
+/* Form groups */
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #333;
+}
+
+.form-group label .icon {
+  color: #0050ef;
+  font-size: 1.2rem;
+}
+
+/* Inputs and selects */
+.form-input {
+  padding: 10px 14px;
+  font-size: 1rem;
+  border: 2px solid #cbd5e1;
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+  outline-offset: 2px;
+}
+
+.form-input:focus {
+  border-color: #0050ef;
+  outline: none;
+  box-shadow: 0 0 6px rgba(0, 80, 239, 0.4);
+}
+
+/* Pledge options buttons */
+.pledge-options {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pledge-btn {
+  background-color: #e7f1ff;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0050ef;
+  transition: all 0.3s ease;
+  min-width: 110px;
+  justify-content: center;
+}
+
+.pledge-btn svg {
+  font-size: 1.5rem;
+}
+
+.pledge-btn:hover {
+  background-color: #cce0ff;
+}
+
+.pledge-btn.active {
+  background-color: #0050ef;
+  color: #fff;
+  border-color: #003bb3;
+}
+
+/* Loan Amount Summary */
+.loan-amount-summary {
+  display: flex;
+  gap: 25px;
+  margin: 20px 0 15px;
+  flex-wrap: wrap;
+}
+
+.loan-amount-item {
+  flex: 1 1 45%;
+  background-color: #f1f5ff;
+  border-radius: 8px;
+  padding: 15px 18px;
+  box-shadow: inset 0 0 6px rgb(0 80 239 / 0.1);
+}
+
+.loan-amount-item label {
+  font-weight: 700;
+  font-size: 1rem;
+  color: #0050ef;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.amount-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 8px;
+  color: #0a2249;
+}
+
+.estimated-amount {
+  color: #198754;
+}
+
+.max-amount {
+  color: #dc3545;
+}
+
+/* WhatsApp Send Button */
+.send-whatsapp-btn {
+  background-color: #25d366;
+  border: none;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.send-whatsapp-btn:disabled {
+  background-color: #a6d6b9;
+  cursor: not-allowed;
+}
+
+.send-whatsapp-btn:hover:not(:disabled) {
+  background-color: #1da851;
+}
+
+.whatsapp-icon {
+  font-size: 1.4rem;
+}
+
+/* Schedule Section */
+.schedule-section {
+  padding: 15px 10px;
+  background-color: #f1f5ff;
+  border-radius: 8px;
+  box-shadow: inset 0 0 6px rgb(0 80 239 / 0.1);
+}
+
+.schedule-description {
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: #0a2249;
+}
+
+/* After Hours Message */
+.after-hours-message {
+  background-color: #fff3cd;
+  border-radius: 8px;
+  padding: 18px 20px;
+  color: #664d03;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  text-align: center;
+}
+
+.warning-icon {
+  font-size: 2rem;
+  color: #ffc107;
+}
+
+.customer-support-btn {
+  background-color: #0050ef;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.customer-support-btn:hover {
+  background-color: #003bb3;
+}
+
+/* Policy Section */
+.policy-section {
+  margin-top: 30px;
+  border-top: 2px solid #0050ef;
+  padding-top: 25px;
+}
+
+.policy-section h2 {
+  font-size: 1.5rem;
+  color: #0050ef;
+  margin-bottom: 15px;
+  font-weight: 700;
+}
+
+.policy-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.policy-section li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+  font-size: 1.05rem;
+  color: #333;
+  line-height: 1.4;
+}
+
+.policy-icon {
+  color: #0050ef;
+  font-size: 1.3rem;
+  margin-top: 3px;
+}
+
+/* Warning Section */
+.warning-section {
+  margin-top: 30px;
+  background-color: #ffe5e5;
+  border: 2px solid #dc3545;
+  padding: 15px 18px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.warning-text {
+  color: #a71d2a;
+  font-weight: 700;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 650px) {
+  .lending-container {
+    padding: 0 10px 30px;
+  }
+
+  .loan-amount-summary {
+    flex-direction: column;
+  }
+
+  .loan-amount-item {
+    flex: 1 1 100%;
+  }
+
+  .pledge-options {
+    justify-content: center;
+  }
 }
