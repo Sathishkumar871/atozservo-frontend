@@ -5,7 +5,7 @@ import Notification from "./Notification";
 import BottomNav from "./BottomNav";
 import PostServiceForm from "./PostServiceForm";
 import Scrolling from "./scrolling";
-import MainButtons from './mainbuttons'; // The version with Material-UI icons
+import MainButtons from './mainbuttons'; 
 
 import "./Home.css";
 

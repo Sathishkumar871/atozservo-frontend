@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './FreeFire.css';
 
 interface Team {
@@ -105,7 +105,7 @@ const FreeFire: React.FC = () => {
   const [bookingId, setBookingId] = useState('');
 
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const [tournaments, setTournaments] = useState<Tournament[]>(initialTournaments);
+  const [tournaments] = useState<Tournament[]>(initialTournaments);
 
   const showNotification = (message: string, type: 'success' | 'error') => {
     setNotification({ message, type });

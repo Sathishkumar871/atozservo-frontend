@@ -95,7 +95,6 @@ const content = {
   },
 };
 
-// ... (remaining vehicleData object is unchanged)
 const vehicleData = {
   Bike: {
     companies: {
@@ -141,7 +140,8 @@ type PledgeItem = 'Bike' | 'Gold' | 'Car' | 'Auto' | 'Mobile' | '';
 
 const MoneyLending: React.FC = () => {
   const [lang, setLang] = useState('en');
-  const t = (key: keyof typeof content.en) => content[lang][key];
+  // FIX: Type assertion to resolve the TypeScript error
+  const t = (key: keyof typeof content.en) => content[lang as keyof typeof content][key];
 
   const [name, setName] = useState('');
   const [village, setVillage] = useState('');

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Pubg.css';
 
 interface Team {
@@ -121,7 +121,7 @@ const Pubg: React.FC = () => {
   const [bookingId, setBookingId] = useState('');
 
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const [tournaments, setTournaments] = useState<Tournament[]>(initialTournaments);
+  const [tournaments] = useState<Tournament[]>(initialTournaments);
 
   const showNotification = (message: string, type: 'success' | 'error') => {
     setNotification({ message, type });
@@ -487,7 +487,7 @@ const Pubg: React.FC = () => {
                     placeholder="Enter your team name"
                     required 
                   />
-                   <label htmlFor="mobileNumber">Your 10-Digit Mobile Number</label>
+                    <label htmlFor="mobileNumber">Your 10-Digit Mobile Number</label>
                   <input 
                     type="tel" 
                     id="mobileNumber" 
