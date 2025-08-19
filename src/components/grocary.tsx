@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import './Grocery.css'; // దీనికి సంబంధించిన CSS ను కింద ఇచ్చాను
+import './Grocery.css'; 
 import { FaShoppingBasket, FaLeaf, FaGlassMartiniAlt, FaBolt, FaBoxOpen } from 'react-icons/fa';
-
-// ఉదాహరణ డేటా (దీన్ని మీరు మీ API నుండి తెచ్చుకోవచ్చు)
 const categories = [
   { name: 'Fruits & Veggies', icon: <FaLeaf />, color: '#2ecc71' },
   { name: 'Dairy & Bread', icon: <FaShoppingBasket />, color: '#f1c40f' },
