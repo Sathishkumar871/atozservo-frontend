@@ -1,0 +1,53 @@
+.order-tracking-panel {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+  overflow: hidden;
+  font-family: sans-serif;
+  z-index: 1000;
+}
+
+.order-tracking-header {
+  background-color: #ff6347;
+  color: white;
+  padding: 12px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.order-tracking-body {
+  padding: 12px;
+}
+
+.order-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.order-tracking-footer {
+  padding: 10px;
+  text-align: center;
+}
+
+.nav-button {
+  padding: 10px 15px;
+  background-color: #ff6347;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}

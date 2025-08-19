@@ -1,156 +1,125 @@
+/* Home.css */
+
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  padding: 0;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background-color: #f0f4f8; 
+  color: #333;
+  overflow-x: hidden;
 }
-.page {
-  padding-top: 80px;
-  padding-bottom: 80px;
-}
+
 .sticky-header {
-  top: 0;
-  z-index: 1000;
-  padding: 6px 12px; 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.09);
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
   position: fixed;
+  top: 0;
   left: 0;
   right: 0;
- background: linear-gradient(to bottom, #AED7F4, #ffffff);
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
+  padding: 12px 16px; 
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.8));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
+
 .header-content {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 10px;
   flex: 1;
-}
-.scrollable-content {
-    padding-top: 120px; 
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
+  min-width: 0;
 }
 
-.long-box {
-  height: 1800px;
-  background:#FFFAEF;
-}
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  left: 20px;
-  right: 20px;
-  border-radius: 30px;
-  background: #ffffff;
-  border-top: 1px solid #ddd;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  height: 70px;
-  z-index: 999;
-  padding: 10px 0;
-}
-
-/* 🔹 Nav Items */
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  cursor: pointer;
-  transition: transform 0.3s ease, color 0.3s ease;
-  width: 20%; 
-}
-
-.nav-item:hover {
-  transform: scale(1.05);
-  color: #007bff;
-}
-
-.nav-icon {
-  font-size: 24px;
-}
-
-.nav-label {
-  font-size: 12px;
-  margin-top: 4px;
-}
-
-/* 🔹 Responsive Breakpoints */
-@media (min-width: 768px) {
-  .sticky-header {
-    padding: 8px 30px;
-  }
-}
-
-  .nav-icon {
-    font-size: 20px;
-  }
-
-  .nav-label {
-    font-size: 10px;
-  }
-
-  .bottom-nav {
-    height: 60px;
-    padding: 8px 0;
-  }
-
-  .nav-item {
-    width: 25%;
-  }
-
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .header-content {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .nav-icon {
-    font-size: 22px;
-  }
-
-  .nav-label {
-    font-size: 11px;
-  }
-
-  .nav-item {
-    width: 20%;
-  }
-}
-
-@media (min-width: 1024px) {
-  .nav-icon {
-    font-size: 26px;
-  }
-
-  .nav-label {
-    font-size: 14px;
-  }
-
-  .bottom-nav {
-    height: 70px;
-    padding: 12px 60px;
-    justify-content: space-between;
-  }
-
-  .nav-item {
-    width: auto;
-    margin: 0 20px;
-  }
-}
 .logo-section {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .app-logo {
   height: 40px;
   width: 40px;
-  border-radius: 8px;  
+  border-radius: 8px;
   object-fit: cover;
+}
+
+.scrollable-content {
+  /* హెడర్ ఎత్తుకు సరిపడా padding-top ను 60px కు సెట్ చేశాం */
+  padding-top: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+}
+
+@media (min-width: 1024px) {
+  .sticky-header {
+    padding: 12px 60px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sticky-header {
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .header-content {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .logo-section {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  padding: 20px 10px; 
+  border-radius: 22px;
+  background-color: transparent; 
+}
+
+.premium-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  cursor: pointer;
+  padding: 12px 5px;
+  margin: 0 6px;
+  background-color: #ffffff; 
+  border-radius: 40px; 
+ 
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.07);
+  
+  transition: all 0.3s ease-in-out;
+}
+
+.premium-button:hover {
+  transform: translateY(-5px); 
+  box-shadow: 0px 8px 25px rgba(0, 123, 255, 0.15);
+}
+
+.premium-button p {
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  margin-top: 10px;
+  margin-bottom: 0;
 }

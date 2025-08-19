@@ -1,0 +1,338 @@
+/* Travel.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --background-color: #f8f9fa;
+  --card-bg: #ffffff;
+  --text-color: #343a40;
+  --heading-color: #212529;
+  --border-color: #dee2e6;
+  --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.travel-container {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 20px;
+}
+
+.travel-header {
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 30px;
+  background: linear-gradient(135deg, var(--primary-color), #0056b3);
+  color: white;
+  border-radius: 12px;
+}
+
+.travel-header .header-icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+
+.travel-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.travel-header p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+}
+
+.travel-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.section-title .title-icon {
+  font-size: 1.8rem;
+  color: var(--primary-color);
+}
+
+.section-title h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin: 0;
+}
+
+.rental-grid, .private-travels-grid, .bookings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.rental-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+
+.rental-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+.rental-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.rental-info {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.rental-info h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.rental-specs {
+  display: flex;
+  gap: 15px;
+  font-size: 0.85rem;
+  color: var(--secondary-color);
+  margin-bottom: 15px;
+}
+
+.rental-specs span {
+  background: #e9ecef;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.rental-price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.rental-price span {
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: var(--secondary-color);
+}
+
+.book-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-button:hover {
+  background-color: #0056b3;
+}
+
+.private-travel-card {
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.private-travel-icon {
+  font-size: 2.5rem;
+  color: var(--primary-color);
+  margin-bottom: 15px;
+}
+
+/* Booking Status Card */
+.booking-status-card {
+  display: flex;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  padding: 15px;
+  gap: 15px;
+  align-items: center;
+}
+
+.booking-status-card img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.booking-status-info h4 {
+  margin: 0 0 5px;
+  font-size: 1.1rem;
+}
+
+.booking-status-info p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
+.status {
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  display: inline-block;
+  margin-top: 5px;
+}
+
+.status.confirmed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+/* Modal Styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--secondary-color);
+}
+
+.booking-step h2 {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  border: 1px solid var(--border-color);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.form-group input {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 1rem;
+}
+
+.date-group span {
+  color: var(--secondary-color);
+}
+
+.cost-summary {
+  margin: 20px 0;
+  padding: 15px;
+  background: #e9ecef;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.cost-summary p {
+  margin: 5px 0;
+}
+
+.confirm-button, .cancel-button {
+  width: 100%;
+  padding: 15px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.confirm-button {
+  background: var(--primary-color);
+  color: white;
+}
+
+.confirm-button:disabled {
+  background: #a1c9f7;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background: var(--border-color);
+  color: var(--text-color);
+}
+
+.payment-summary {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.total-cost {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--heading-color);
+}
+
+.payment-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.confirmation {
+  text-align: center;
+}
+
+.confirmation-icon {
+  font-size: 4rem;
+  color: #28a745;
+  margin-bottom: 20px;
+}

@@ -143,14 +143,17 @@ const AccountPage: React.FC<AccountPageProps> = ({ user, setUser, onLoginClick }
           <RiSettings3Line className="icon" />
           <span>Marketplace Settings</span>
         </div>
-        <div className="option-card">
-          <RiCustomerService2Line className="icon" />
-          <span>Support</span>
-        </div>
-        <div className="option-card">
-          <RiStarLine className="icon" />
-          <span>Rate App</span>
-        </div>
+       <div
+      className="option-card"
+     onClick={() => navigate("/support")}
+      >
+     <RiCustomerService2Line className="icon" />
+    <span>Support</span>
+     </div>
+        <div className="option-card" onClick={() => navigate("/rate-app")}>
+     <RiStarLine className="icon" />
+       <span>Rate Website</span>
+          </div>
         <div className="option-card">
           <RiMore2Line className="icon" />
           <span>Others</span>

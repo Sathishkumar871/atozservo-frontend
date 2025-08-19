@@ -4,6 +4,8 @@ import Menu from "./Menu";
 import Notification from "./Notification";
 import BottomNav from "./BottomNav";
 import PostServiceForm from "./PostServiceForm";
+import Scrolling from "./scrolling";
+import MainButtons from './mainbuttons'; // The version with Material-UI icons
 
 import "./Home.css";
 
@@ -21,25 +23,25 @@ interface Props {
 const Home: React.FC<Props> = ({ user, onLoginClick }) => {
   const [showPostForm, setShowPostForm] = useState(false);
   const [isPanelOpen] = useState(false);
-  const [showPipedPlayer, setShowPipedPlayer] = useState(false); // ⬅️ Add this line
+  const [showPipedPlayer, setShowPipedPlayer] = useState(false);
 
   const handlePostClick = () => {
     if (!user) {
-      onLoginClick(); // 👉 Triggers login panel from App.tsx
+      onLoginClick();
     } else {
       setShowPostForm(true);
     }
   };
 
   const handleYouTubeClick = () => {
-    setShowPipedPlayer(true); // ⬅️ Show PipedPlayer
+    setShowPipedPlayer(true);
   };
 
   return (
     <>
       <header className="sticky-header">
         <div className="header-content">
-          <div className="logo-section" onClick={handleYouTubeClick}> {/* ⬅️ Add onClick */}
+          <div className="logo-section" onClick={handleYouTubeClick}>
             <img
               src="https://res.cloudinary.com/dlkborjdl/image/upload/v1751882045/WhatsApp_Image_2025-07-05_at_22.20.45_59cde82e_cavjfj.jpg"
               alt="AtoZ Logo"
@@ -59,9 +61,16 @@ const Home: React.FC<Props> = ({ user, onLoginClick }) => {
           <h1>Welcome to AtoZ Services!</h1>
         </div>
 
+        {/* --- మార్పు ఇక్కడే చేసాము --- */}
+        {/* ఇప్పుడు Scrolling పైన ఉంది */}
+        <Scrolling />
+
+        {/* ఐకాన్ బటన్లు Scrolling కింద ఉన్నాయి */}
+        <MainButtons />
+
         {showPipedPlayer && (
-          <div className="youtube-player-wrapper">  {/* You can style this in CSS */}
-           
+          <div className="youtube-player-wrapper">
+
           </div>
         )}
 

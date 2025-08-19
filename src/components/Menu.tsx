@@ -8,10 +8,9 @@ import LoginPanel from './LoginPanel';
 import PolicyPanel from './PolicyPanel';
 import YouTubeLogo from './YouTubeLogo';
 import YouTubeSearch from './YouTubeSearch';
-import SpotifyLogo from "./SpotifyLogo"; 
-import Games from './games/Games';
+import SpotifyLogo from "./SpotifyLogo";
 import { useNavigate } from 'react-router-dom';
-import Finance from './finance/finance';
+
 
 interface MenuProps {
   user: any;
@@ -28,10 +27,7 @@ const Menu: React.FC<MenuProps> = ({ user, setUser }) => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const handleGamesClick = () => {
-    setIsOpen(false); // close menu
-    navigate('/gamedesign'); // navigate to gamedesign page
-  };
+  // ✅ 'handleGamesClick' ఫంక్షన్ ఇక్కడ నుండి తీసివేయబడింది
 
   return (
     <>
@@ -66,10 +62,8 @@ const Menu: React.FC<MenuProps> = ({ user, setUser }) => {
                   <p className="user-email">{user.email}</p>
 
                   <SpotifyLogo />
-                  <Finance/>
-
-                  {/* Games button with click handler */}
-                  <Games onClick={handleGamesClick} />
+                  
+                  {/* ✅ <Games /> కాంపోనెంట్ ఇక్కడ నుండి తీసివేయబడింది */}
 
                   <div className="logo-button-row">
                     {!showSearchBar && (

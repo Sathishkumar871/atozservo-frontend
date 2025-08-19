@@ -2,20 +2,11 @@ import React, { useState, useEffect, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaPlus, FaSearch, FaTimes, FaCrown, FaHeart } from 'react-icons/fa';
 import { BsPeopleFill } from 'react-icons/bs';
-import { FaDiscord, FaFacebookSquare } from 'react-icons/fa';
-import './Lobby.css';
 
-// Firestore imports
+import './Lobby.css';
 import {
-  collection,
-  addDoc,
-  onSnapshot,
-  query,
-  orderBy,
-  doc,
-  updateDoc,
-  arrayUnion,
-  deleteDoc
+  collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc,
+  arrayUnion, deleteDoc, getDoc, arrayRemove
 } from 'firebase/firestore';
 import { db } from '../../firebase';
 
@@ -53,39 +44,62 @@ const Lobby: React.FC = () => {
   const [newRoomMembers, setNewRoomMembers] = useState<number>(10);
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Load user name from session storage and rooms from Firestore, also delete empty rooms
   useEffect(() => {
     const savedName = sessionStorage.getItem('display_name') || '';
     setUserName(savedName);
     setTempUserName(savedName);
 
     const q = query(collection(db, "rooms"), orderBy("createdAt", "desc"));
-    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const fetchedRooms: RoomInfo[] = [];
-      const deletePromises: Promise<void>[] = [];
-
-      querySnapshot.docs.forEach(docSnap => {
-        const data = docSnap.data() as Omit<RoomInfo, 'id'>;
-
-        // If currentMembers empty, delete the room doc
-        if (!data.currentMembers || data.currentMembers.length === 0) {
-          deletePromises.push(deleteDoc(docSnap.ref));
+      querySnapshot.forEach(docSnap => {
+        const roomData = docSnap.data();
+        
+        if (roomData.currentMembers && roomData.currentMembers.length === 0) {
+            deleteDoc(doc(db, "rooms", docSnap.id));
         } else {
-          fetchedRooms.push({ id: docSnap.id, ...data });
+            fetchedRooms.push({ id: docSnap.id, ...roomData } as RoomInfo);
         }
       });
-
-      if (deletePromises.length > 0) {
-        await Promise.all(deletePromises);
-      }
-
       setRooms(fetchedRooms);
     });
 
     return () => unsubscribe();
   }, []);
 
-  // Filter rooms on search/filter changes
+  useEffect(() => {
+    const handleBeforeUnload = async (event: BeforeUnloadEvent) => {
+      const currentRoomId = sessionStorage.getItem('current_room_id');
+      const currentUserName = sessionStorage.getItem('display_name');
+      if (currentRoomId && currentUserName) {
+        event.preventDefault();
+        const roomDocRef = doc(db, "rooms", currentRoomId);
+        const memberToRemove = { name: currentUserName, avatar: `https://i.pravatar.cc/150?u=${currentUserName}`, roses: 0 };
+        
+       
+        await updateDoc(roomDocRef, {
+          currentMembers: arrayRemove(memberToRemove)
+        });
+        
+        const updatedRoomSnap = await getDoc(roomDocRef);
+        if (updatedRoomSnap.exists()) {
+          const roomData = updatedRoomSnap.data();
+          if (!roomData.currentMembers || roomData.currentMembers.length === 0) {
+            await deleteDoc(roomDocRef);
+          }
+        }
+        
+        sessionStorage.removeItem('current_room_id');
+      }
+    };
+    
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
+
   useEffect(() => {
     const results = rooms.filter(room => {
       const categoryMatch = activeCategory === 'All' || room.category === activeCategory;
@@ -113,6 +127,7 @@ const Lobby: React.FC = () => {
       await updateDoc(roomDocRef, {
         currentMembers: arrayUnion(newMember)
       });
+      sessionStorage.setItem('current_room_id', room.id);
       navigate(`/room/${room.id}?user=${userName}`);
     } catch (e) {
       console.error("Error joining room:", e);
@@ -128,33 +143,50 @@ const Lobby: React.FC = () => {
     }
 
     const newRoom = {
-      name: newRoomName,
-      category: newRoomCategory,
-      language: newRoomLanguage,
-      level: newRoomLevel,
-      maxMembers: newRoomMembers,
+      name: newRoomName, category: newRoomCategory, language: newRoomLanguage,
+      level: newRoomLevel, maxMembers: newRoomMembers,
       currentMembers: [{ name: userName, avatar: `https://i.pravatar.cc/150?u=${userName}`, roses: 0 }],
-      owner: userName,
-      createdAt: Date.now(),
+      owner: userName, createdAt: Date.now(),
     };
     
     try {
-      await addDoc(collection(db, "rooms"), newRoom);
+      const docRef = await addDoc(collection(db, "rooms"), newRoom);
       setShowCreateModal(false);
-      setNewRoomName('');
-      setNewRoomCategory('Fun');
-      setNewRoomLanguage('English');
-      setNewRoomLevel('Any Level');
-      setNewRoomMembers(10);
+      sessionStorage.setItem('current_room_id', docRef.id);
+      navigate(`/room/${docRef.id}?user=${userName}`);
     } catch (e) {
       console.error("Error adding document: ", e);
       alert("Failed to create group. Please try again.");
     }
   };
 
+  const handleAutoCreateRoom = async () => {
+    if (!userName) {
+      setShowNameModal(true);
+      return;
+    }
+
+    const randomRoomName = `Fun Hangout #${Math.floor(1000 + Math.random() * 9000)}`;
+    const newRoomData = {
+      name: randomRoomName, category: 'Fun', language: 'English',
+      level: 'Any Level' as RoomInfo['level'], maxMembers: 10,
+      currentMembers: [{ name: userName, avatar: `https://i.pravatar.cc/150?u=${userName}`, roses: 0 }],
+      owner: userName, createdAt: Date.now(),
+    };
+
+    try {
+      const docRef = await addDoc(collection(db, "rooms"), newRoomData);
+      sessionStorage.setItem('current_room_id', docRef.id);
+      navigate(`/room/${docRef.id}?user=${userName}`);
+    } catch (e) {
+      console.error("Error with auto-create: ", e);
+      alert("Failed to auto-create a group. Please try again.");
+    }
+  };
+
   const handleSaveName = () => {
     if (tempUserName.trim() === '') {
-      console.error('Display name cannot be empty.');
+      alert('Display name cannot be empty.');
       return;
     }
     sessionStorage.setItem('display_name', tempUserName);
@@ -201,19 +233,17 @@ const Lobby: React.FC = () => {
           <div className="nav-top">
             <h3 id="logo">TalkHive</h3>
             <div id="nav__links">
+              <button className="auto-create-btn" onClick={handleAutoCreateRoom}>
+                ⚡ Auto Create
+              </button>
               <button className="create__room__btn" onClick={() => userName ? setShowCreateModal(true) : setShowNameModal(true)}>
                 <FaPlus />
-                <span>Create a new group</span>
-              </button>
-              <button className="buy-coffee-btn">
-                <span>☕ Buy me a coffee</span>
+                <span>Create Group</span>
               </button>
             </div>
           </div>
           <div className="nav-bottom">
             <a href="#">Privacy Policy</a>
-            <a href="#"><FaDiscord /> Discord Announcements</a>
-            <a href="#"><FaFacebookSquare /> Facebook Group</a>
           </div>
         </div>
       </header>
@@ -281,6 +311,21 @@ const Lobby: React.FC = () => {
         </div>
       </main>
 
+     
+      <nav className="bottom-nav">
+        <button className="bottom-nav-btn left" onClick={() => navigate('/chat')}>
+          💬 Chat
+        </button>
+        
+        <button className="bottom-nav-btn middle" onClick={() => navigate('/find-partner')}>
+          🔍 Find Partner
+        </button>
+        
+        <button className="bottom-nav-btn right" onClick={() => navigate('/chat-history')}>
+          📜 Chat History
+        </button>
+      </nav>
+
       {showCreateModal && (
         <div className="modal__overlay">
           <div className="modal__content">
@@ -290,9 +335,7 @@ const Lobby: React.FC = () => {
               <div className="form__field__wrapper">
                 <label>Group Name</label>
                 <input
-                  type="text"
-                  required
-                  value={newRoomName}
+                  type="text" required value={newRoomName}
                   onChange={(e) => setNewRoomName(e.target.value)}
                   placeholder="Enter a group name..."
                 />
@@ -301,9 +344,7 @@ const Lobby: React.FC = () => {
                 <label>Language</label>
                 <select value={newRoomLanguage} onChange={(e) => setNewRoomLanguage(e.target.value)}>
                   {languages.filter(lang => lang !== 'All').map(lang => (
-                    <option key={lang} value={lang}>
-                      {lang}
-                    </option>
+                    <option key={lang} value={lang}>{lang}</option>
                   ))}
                 </select>
               </div>
@@ -311,27 +352,20 @@ const Lobby: React.FC = () => {
                 <label>Level</label>
                 <select value={newRoomLevel} onChange={(e) => setNewRoomLevel(e.target.value as RoomInfo['level'])}>
                   {levels.map(level => (
-                    <option key={level} value={level}>
-                      {level}
-                    </option>
+                    <option key={level} value={level}>{level}</option>
                   ))}
                 </select>
               </div>
               <div className="form__field__wrapper">
                 <label>Max Members (2-20)</label>
                 <input
-                  type="number"
-                  min="2"
-                  max="20"
-                  value={newRoomMembers}
+                  type="number" min="2" max="20" value={newRoomMembers}
                   onChange={(e) => setNewRoomMembers(Number(e.target.value))}
                 />
               </div>
               <div className="modal__actions">
                 <button type="submit">Create</button>
-                <button type="button" className="cancel__button" onClick={() => setShowCreateModal(false)}>
-                  Cancel
-                </button>
+                <button type="button" className="cancel__button" onClick={() => setShowCreateModal(false)}>Cancel</button>
               </div>
             </form>
           </div>
@@ -346,18 +380,14 @@ const Lobby: React.FC = () => {
             <div className="form__field__wrapper">
               <label>Full Name</label>
               <input
-                type="text"
-                required
-                value={tempUserName}
+                type="text" required value={tempUserName}
                 onChange={(e) => setTempUserName(e.target.value)}
                 placeholder="Enter your name..."
               />
             </div>
             <div className="modal__actions">
               <button onClick={handleSaveName}>Save</button>
-              <button type="button" className="cancel__button" onClick={() => setShowNameModal(false)}>
-                Cancel
-              </button>
+              <button type="button" className="cancel__button" onClick={() => setShowNameModal(false)}>Cancel</button>
             </div>
           </div>
         </div>

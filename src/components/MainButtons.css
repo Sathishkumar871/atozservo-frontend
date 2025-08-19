@@ -1,0 +1,61 @@
+/* Container for all the buttons */
+.buttons-container {
+  display: grid;
+  /* Creates a responsive grid. Buttons will have a minimum width of 140px and will stretch to fill the space. */
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 24px; /* Space between buttons */
+  padding: 24px;
+  max-width: 800px;
+  margin: auto; /* Center the container */
+}
+
+/* Individual button styling */
+.premium-button {
+  /* Use Flexbox to center content vertically */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  
+  padding: 20px;
+  background-color: #ffffff; /* A clean white background */
+  border-radius: 16px; /* Softer, more modern corners */
+  border: 1px solid #e0e0e0; /* A subtle border */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* A soft shadow for a "lifted" feel */
+  cursor: pointer;
+  text-align: center;
+  
+  /* This is the key for smooth animations! */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* The "premium" animation on hover */
+.premium-button:hover {
+  /* Lifts the button up slightly */
+  transform: translateY(-8px);
+  /* Makes the shadow more pronounced */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  /* Uses the specific color from the component for the border */
+  border-color: var(--service-color);
+}
+
+/* A subtle "press down" effect when clicking */
+.premium-button:active {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Style for the text inside the button */
+.premium-button p {
+  margin: 12px 0 0 0; /* Space between icon and text */
+  font-size: 1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Style for the icon. We get the color from the JS component. */
+.premium-button .MuiSvgIcon-root {
+  /* Use the color from the component */
+  color: var(--service-color);
+  font-size: 40px !important; /* Ensure icon size is consistent */
+}

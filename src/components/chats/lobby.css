@@ -1,12 +1,12 @@
 :root {
-  --primary-color: #5d5d81; /* Deep Blue-Gray for main actions */
-  --secondary-color: #e6e6dc; /* Soft Beige for group cards */
-  --tertiary-color: #94a3b8; /* A lighter shade of Blue-Gray for accents */
-  --background-color: #2b2b3f; /* Deep Blue-Gray for main background */
-  --card-background: #e6e6dc; /* Soft Beige for group cards */
-  --text-color: #333; /* Dark text for light backgrounds */
-  --text-color-light: #555; /* Slightly lighter dark text */
-  --border-color: #ccc; /* Light gray border */
+  --primary-color: #5d5d81; 
+  --secondary-color: #e6e6dc; 
+  --tertiary-color: #94a3b8; 
+  --background-color: #2b2b3f; 
+  --card-background: #e6e6dc; 
+  --text-color: #333; 
+  --text-color-light: #555; 
+  --border-color: #ccc; 
   --button-hover: #4e4e6d; 
   --full-group-color: #d32f2f;
   --owner-crown-color: #ffc107; 
@@ -15,7 +15,7 @@
   --header-icon: #cbd5e1;
 }
 
-/* Base Styling */
+
 body {
   background-color: var(--background-color);
   color: var(--text-color);
@@ -45,12 +45,11 @@ button {
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
+  right: 10px;
   z-index: 1000;
   background-color: var(--header-bg);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
-
 .nav-container {
   max-width: 1300px;
   margin: 0 auto;
@@ -101,10 +100,6 @@ button {
     background-color: #fcd34d;
     color: #111827;
 }
-.buy-coffee-btn:hover {
-    background-color: #fbbf24;
-}
-
 .nav-bottom {
     display: flex;
     justify-content: flex-start;

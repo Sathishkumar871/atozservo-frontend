@@ -1,51 +1,88 @@
-/* App.css */
-
-:root {
-  --background-dark: #1C1C2F;
-  --text-light: #ECECEC;
-  --accent-call: #9B59B6;
-  --header-light-transparent: rgba(142, 68, 173, 0.3);
-  --white-glow: 0 0 10px rgba(255, 255, 255, 0.3);
-  --background: linear-gradient(135deg, #0a0a1a, #1a0a2a, #0a1a2a);
-}
-
 body {
   margin: 0;
-  padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #fff;
-  color: #333;
-  overflow-x: hidden;
+  font-family: Arial, sans-serif;
 }
 
-#root {
-  width: 100vw;
-  min-height: 100vh;
+
+.scroll-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+
+.scroll-container {
   display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  font-family: 'Segoe UI', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-smoothing: grayscale;
-
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  -webkit-user-drag: none;
-  touch-action: manipulation;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none; /* IE & Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
-/* Optional: Scrollbar customization */
-::-webkit-scrollbar {
-  width: 8px;
+.scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
 }
 
-::-webkit-scrollbar-thumb {
-  background-color: #888;
-  border-radius: 4px;
+/* Each item */
+.scroll-item {
+  flex: 0 0 100%; /* 1 card per screen */
+  max-width: 100%;
+  scroll-snap-align: center;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: #555;
+/* Card design */
+.featured-card {
+  height: 250px;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Dark overlay for text readability */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+}
+
+/* Text box inside card */
+.text-box {
+  background: rgba(0,0,0,0.6);
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.text-box h3 {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.text-box p {
+  margin: 5px 0 0;
+  color: #ddd;
+  font-size: 0.9rem;
+}
+
+/* Responsive heights */
+@media (min-width: 768px) {
+  .featured-card {
+    height: 350px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .featured-card {
+    height: 450px;
+  }
+}
+.app-container {
+  /* మీ మొత్తం అప్లికేషన్ స్క్రీన్ మొత్తం నిండడానికి */
+  min-height: 100vh;
 }

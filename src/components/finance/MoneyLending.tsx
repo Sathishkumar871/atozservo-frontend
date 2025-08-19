@@ -5,7 +5,7 @@ import {
   FaCheckCircle, FaLock, FaWhatsapp, FaInfoCircle, FaCalendarAlt, FaStar, FaQuestionCircle, FaClock, FaExclamationTriangle, FaHeadphones
 } from 'react-icons/fa';
 
-// Multilingual Content
+
 const content = {
   en: {
     title: 'Pawn Shop',
