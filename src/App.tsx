@@ -1,4 +1,4 @@
-// App.tsx
+
 import './App.css';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Home from './components/Home';
@@ -15,7 +15,8 @@ import VideoCallMobile from './components/VideoCallMobile';
 import LoginPanel from './components/LoginPanel'; 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState} from 'react';
+import { ReactNode } from "react";
 import { nanoid } from 'nanoid';
 import axios from 'axios';
 import socket from './socket';
