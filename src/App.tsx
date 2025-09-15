@@ -10,7 +10,7 @@ import ServiceDetails from './components/ServiceDetails';
 //import EditProfile from './components/EditProfile';
 import SearchResults from './components/SearchResults';
 import AccountPage from './components/AccountPage';
-import VideoCallMobile from './components/VideoCallMobile';
+//import VideoCallMobile from './components/VideoCallMobile';
 import LoginPanel from './components/LoginPanel';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -181,7 +181,7 @@ function App() {
         <Route path="/search" element={<SearchResults />} />
         <Route path="/services/:serviceType" element={<ServiceListPage />} />
         <Route path="/rate-app" element={<RateAppPage />} />
-        <Route path="/videocall/:id" element={<VideoCallMobile />} />
+      
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/room/:roomId" element={<Room />} />
         <Route path="/youtube" element={<YouTubeSearch />} />
