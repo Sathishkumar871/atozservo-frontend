@@ -34,11 +34,11 @@ import SupportChat from './components/SupportChat';
 import RateAppPage from "./components/RateAppPage";
 import ServiceListPage from './components/ServiceListPage';
 import Lobby from './pages/Lobby';
-import Room from './pages/Room';
-import AddProduct from './components/grocary/seller/AddProduct';
+//import Room from './pages/Room';
+//import AddProduct from './components/grocary/seller/AddProduct';
 import SellerLayout from './components/grocary/seller/SellerLayout.';
 import SellerLogin from './components/grocary/seller/SellerLogin';
-import ProductList from './components/grocary/seller/ProductList';
+//import ProductList from './components/grocary/seller/ProductList';
 import Orders from './components/grocary/seller/Orders';
 //import ProductDisplay from './components/grocary/pages/ProductDisplay';
 import VegetablesPage from './components/grocary/pages/grocaryfiles/VegetablesPage';
@@ -183,7 +183,7 @@ function App() {
         <Route path="/rate-app" element={<RateAppPage />} />
       
         <Route path="/lobby" element={<Lobby />} />
-        <Route path="/room/:roomId" element={<Room />} />
+       
         <Route path="/youtube" element={<YouTubeSearch />} />
         <Route path="/callback" element={<SpotifyCallback />} />
         <Route path="/gamedesign" element={<GameDesign />} />
@@ -196,8 +196,7 @@ function App() {
         <Route path="/support" element={<ProtectedRoute><SupportChat user={user} /></ProtectedRoute>} />
       
         <Route path="/seller" element={user ? <SellerLayout /> : <SellerLogin />}>
-          <Route index element={user ? <AddProduct /> : null} />
-          <Route path="product-list" element={user ? <ProductList /> : null} />
+        
           <Route path="orders" element={user ? <Orders /> : null} />
         </Route>
       </Routes>
