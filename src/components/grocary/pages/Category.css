@@ -1,0 +1,147 @@
+/* Container for the horizontally scrolling items */
+.category-scroll-container {
+    display: flex;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding: 1rem 0;
+    -webkit-overflow-scrolling: touch; /* iOS smooth drag */
+    scroll-behavior: smooth;
+    align-items: center;
+    cursor: grab;
+}
+.category-scroll-container:active {
+    cursor: grabbing;
+}
+
+/* Hide scrollbar */
+.category-scroll-container::-webkit-scrollbar {
+    display: none;
+}
+.category-scroll-container {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Card item */
+.category-card-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-shrink: 0;
+    width: 120px;   /* default size */
+    height: 130px;
+    cursor: pointer;
+    border-radius: 15px;
+    background: #fff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    padding: 12px;
+}
+.category-card-item:hover {
+    box-shadow: 0 8px 25px rgba(0, 119, 255, 0.2);
+}
+
+/* Icon + Image wrapper */
+.category-icon-wrap {
+    width: 85px;  /* bigger circle */
+    height: 85px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #f4f6fb;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Image inside */
+.category-card-image {
+    width: 55px;   /* bigger image */
+    height: 55px;
+    object-fit: contain;
+    transition: transform 0.4s ease;
+}
+
+/* Hover animation on image */
+.category-card-item:hover .category-card-image {
+    transform: scale(1.2) rotate(-6deg);
+}
+
+/* Active (click) pulse effect */
+.category-card-item:active .category-card-image {
+    transform: scale(0.9);
+    transition: transform 0.15s ease;
+}
+
+/* Icon styling */
+.category-card-icon {
+    font-size: 1.4rem;  /* bigger icon */
+    color: #0077ff;
+    margin-top: 6px;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+.category-card-item:hover .category-card-icon {
+    transform: translateY(-4px) scale(1.2);
+    color: #ff6600;
+}
+
+/* Text styling */
+.category-card-text {
+    font-family: 'Inter', 'Poppins', sans-serif;
+    font-size: 0.9rem;   /* little bigger */
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-top: 0.4rem;
+    white-space: nowrap;
+    letter-spacing: 0.4px;
+    text-align: center;
+    width: 100%;
+    transition: color 0.3s ease;
+}
+.category-card-item:hover .category-card-text {
+    color: #0077ff;
+}
+
+/* 📱 Mobile responsiveness */
+@media (max-width: 768px) {
+  .category-card-item {
+    width: 95px;
+    height: 110px;
+  }
+  .category-icon-wrap {
+    width: 70px;
+    height: 70px;
+  }
+  .category-card-image {
+    width: 45px;
+    height: 45px;
+  }
+  .category-card-icon {
+    font-size: 1.1rem;
+  }
+  .category-card-text {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .category-card-item {
+    width: 80px;
+    height: 95px;
+  }
+  .category-icon-wrap {
+    width: 60px;
+    height: 60px;
+  }
+  .category-card-image {
+    width: 40px;
+    height: 40px;
+  }
+  .category-card-icon {
+    font-size: 1rem;
+  }
+  .category-card-text {
+    font-size: 0.7rem;
+  }
+}

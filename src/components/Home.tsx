@@ -4,7 +4,7 @@ import Menu from "./Menu";
 import Notification from "./Notification";
 import BottomNav from "./BottomNav";
 import PostServiceForm from "./PostServiceForm";
-import Scrolling from "./scrolling";
+import Scrolling from "./scrolling/scrolling";
 import MainButtons from './mainbuttons'; 
 
 import "./Home.css";

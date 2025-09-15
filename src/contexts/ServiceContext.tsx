@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-// Define the shape of a service
 export interface Service {
   _id: string;
   name: string;
@@ -12,7 +11,6 @@ export interface Service {
   [key: string]: any;
 }
 
-// Define context shape
 interface ServiceContextType {
   allServices: Service[];
   setAllServices: React.Dispatch<React.SetStateAction<Service[]>>;

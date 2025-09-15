@@ -58,8 +58,8 @@ const BottomNav: React.FC<BottomNavProps> = ({
 
       {/* 4. Chat */}
       <div
-        className={`nav-item ${location.pathname === '/chat' ? 'active' : ''}`}
-        onClick={() => handleProtectedRoute('/chat')}
+        className={`nav-item ${location.pathname === '/Lobby' ? 'active' : ''}`}
+        onClick={() => handleProtectedRoute('/Lobby')}
       >
         <BsFillChatRightHeartFill className="icon" />
         <div className="nav-label">Chat</div>

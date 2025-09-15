@@ -10,7 +10,9 @@ const YouTubeSearch: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState<number | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const playerRef = useRef<HTMLIFrameElement | null>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ✅ FIX: Changed the type of useRef to number | null
+  const timeoutRef = useRef<number | null>(null);
 
   const handleSearch = async () => {
     if (!query.trim()) return;

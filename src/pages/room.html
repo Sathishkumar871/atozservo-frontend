@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Room</title>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.21.0/dist/tf.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/body-pix@2.0.5"></script>
+</head>
+<body>
+  <header>
+    <div id="roomInfo"></div>
+    <div id="controls">
+      <button id="muteBtn">Mute</button>
+      <button id="camBtn">Stop Video</button>
+      <button id="bgBtn">Background</button>
+      <button id="leaveBtn">Leave</button>
+    </div>
+  </header>
+
+  <main id="main">
+    <div id="grid"></div>
+    <aside id="side">
+      <div id="chat"></div>
+      <form id="chatForm">
+        <input id="chatInput" placeholder="Type message..."/>
+        <button>Send</button>
+      </form>
+      <div>
+        <button onclick="sendReaction('👍')">👍</button>
+        <button onclick="sendReaction('😂')">😂</button>
+        <button onclick="sendReaction('❤️')">❤️</button>
+      </div>
+    </aside>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>

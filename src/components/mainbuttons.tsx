@@ -12,7 +12,6 @@ import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 const mainServices = [
   { name: 'Food', IconComponent: RestaurantMenuIcon, color: '#ff6f61', path: '/food' },
   { name: 'Services', IconComponent: MiscellaneousServicesIcon, color: '#6b5b95', type: 'Home Services', basePath: '/category' },
-  { name: 'Travel', IconComponent: FlightTakeoffIcon, color: '#88b04b', path: '/travel' },
   { name: 'Grocery', IconComponent: ShoppingCartIcon, color: '#f7cac9', path: '/grocery' },
   { name: 'Money Lending', IconComponent: AttachMoneyIcon, color: '#20845a', path: '/money-lending' },
   { name: 'Games', IconComponent: VideogameAssetIcon, color: '#ff9a00', path: '/gamedesign' },

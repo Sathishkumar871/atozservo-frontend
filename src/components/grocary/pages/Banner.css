@@ -1,0 +1,77 @@
+.banner-container {
+  position: relative;
+  width: 100%;
+}
+
+.banner-container img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  padding-bottom: 6rem;
+}
+
+@media(min-width: 768px) {
+  .banner-overlay {
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 4rem;
+    padding-bottom: 0;
+  }
+}
+
+.banner-overlay h1 {
+  font-size: 1.875rem; /* 3xl */
+  font-weight: 700;
+  color: white;
+  max-width: 18rem;
+  text-align: center;
+  line-height: 1.25;
+}
+
+@media(min-width: 768px) {
+  .banner-overlay h1 {
+    font-size: 2.25rem; /* 4xl */
+    max-width: 24rem;
+    text-align: left;
+  }
+}
+
+.banner-buttons {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.banner-buttons a {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background-color: #007bff; /* primary */
+  color: #fff;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+}
+
+.banner-buttons a:hover {
+  background-color: #0056b3; /* darker primary on hover */
+}
+
+.banner-buttons img {
+  transition: transform 0.3s ease-in-out;
+}
+
+.banner-buttons a:hover img {
+  transform: translateX(0.25rem);
+}

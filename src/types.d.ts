@@ -1,4 +1,3 @@
-// src/types.d.ts
 
 interface SpeechRecognition extends EventTarget {
   lang: string;

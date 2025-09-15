@@ -22,7 +22,6 @@ html,
   overflow-y: auto;
   -webkit-overflow-scrolling: touch; 
 }
-
 .profile-header {
   background: linear-gradient(135deg, #f857a6 0%, #ff5858 40%, #6a11cb 70%, #2575fc 100%);
   color: white;

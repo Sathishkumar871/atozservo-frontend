@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lobby</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #0b1220;
+      color: #fff;
+      font-family: sans-serif;
+      margin: 0;
+    }
+
+    form {
+      background: #111827;
+      padding: 20px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 6px;
+      margin-right: 8px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 16px;
+      border-radius: 6px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <form id="lobbyForm">
+    <input type="text" id="roomInput" placeholder="Enter Room ID" required />
+    <button type="submit">Join</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('lobbyForm');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const room = document.getElementById('roomInput').value;
+      // room.html ki redirect avtundi with query param
+      window.location.href = `room.html?room=${room}`;
+    });
+  </script>
+</body>
+</html>

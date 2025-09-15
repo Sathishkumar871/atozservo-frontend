@@ -1,0 +1,75 @@
+/* ---------- BestSeller Section ---------- */
+.bestseller-section {
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #f0f4f7, #e2e8f0); /* Soft gradient background */
+    border-radius: 16px; /* Slightly larger border radius */
+    margin: 20px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* Premium, subtle shadow */
+}
+
+/* ---------- Header ---------- */
+.bestseller-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px; /* Increased margin for better spacing */
+}
+
+.bestseller-title {
+    font-size: 28px; /* Larger title for a bolder look */
+    font-weight: 700;
+    color: #1a202c; /* Deeper, more luxurious dark color */
+    font-family: 'Poppins', sans-serif;
+}
+
+.bestseller-see-all-btn {
+    background: #4a5568; /* Elegant gray button */
+    color: #fff;
+    border: none;
+    border-radius: 25px; /* Pill shape */
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smoother animation curve */
+    box-shadow: 0 4px 10px rgba(74, 85, 104, 0.2);
+}
+
+.bestseller-see-all-btn:hover {
+    background: #2d3748; /* Darken on hover */
+    transform: translateY(-3px); /* More pronounced lift */
+    box-shadow: 0 8px 20px rgba(74, 85, 104, 0.3);
+}
+
+/* ---------- Product List ---------- */
+.bestseller-list {
+    display: flex;
+    gap: 24px; /* Increased gap for better visual separation */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #a0aec0 transparent; /* More elegant scrollbar color */
+    padding-bottom: 12px;
+}
+
+.bestseller-list::-webkit-scrollbar {
+    height: 8px; /* Thicker scrollbar */
+}
+
+.bestseller-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.bestseller-list::-webkit-scrollbar-thumb {
+    background: #a0aec0; /* Lighter, more modern scrollbar color */
+    border-radius: 10px;
+}
+
+.bestseller-item-wrapper {
+    flex: 0 0 250px; /* Fixed width for consistent card size */
+    transition: transform 0.3s ease-in-out;
+}
+
+.bestseller-item-wrapper:hover {
+    transform: scale(1.02); /* Slight zoom effect on hover */
+}

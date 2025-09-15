@@ -1,20 +1,23 @@
+// src/firebase.ts
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";  
+import { getAuth } from "firebase/auth";
 
+// ఎన్విరాన్‌మెంట్ వేరియబుల్స్ నుండి కాన్ఫిగరేషన్‌ను సురక్షితంగా లోడ్ చేయండి
 const firebaseConfig = {
-  apiKey: "AIzaSyBnm5zoiv9qWj6tKYY1NaxDKQjtR-RgVz4",
-  authDomain: "atozservo.firebaseapp.com",
-  projectId: "atozservo",
-  storageBucket: "atozservo.firebasestorage.app",
-  messagingSenderId: "858738863668",
-  appId: "1:858738863668:web:f1db96e30aa74f293d2461",
-  measurementId: "G-M919N1EGSK",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
-const auth = getAuth(app);  // ✅ Auth instance
+const auth = getAuth(app); // అథెంటికేషన్ కోసం
 
+// db మరియు auth రెండింటినీ ఎక్స్‌పోర్ట్ చేయండి
 export { db, auth };

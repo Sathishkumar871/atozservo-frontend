@@ -1,0 +1,47 @@
+/* ... మీ పాత Lobby.css కోడ్ ... */
+
+.lobby-header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #333;
+}
+
+.user-info {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.auth-button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}
+
+.auth-button.login {
+    background-color: #4285F4; /* Google Blue */
+}
+.auth-button.logout {
+    background-color: #d9534f;
+}
+
+.loading-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 1.5rem;
+}
+
+.room-author {
+    margin: 5px 0 0;
+    font-size: 0.8rem;
+    color: #a0a0a0;
+}
+/* ... మిగిలిన CSS కోడ్ అలాగే ఉంటుంది ... */

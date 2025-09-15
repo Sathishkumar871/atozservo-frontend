@@ -15,6 +15,7 @@ interface Tournament {
   status: 'Open' | 'Live' | 'Completed' | 'Waiting';
   teamSize: string;
   image: string;
+  homeImage?: string; // Added an optional image for the home page
   liveStreamUrl?: string;
   prizePool: string;
   rules: string[];
@@ -33,7 +34,10 @@ const initialTournaments: Tournament[] = [
         hostedBy: 'COSMOS • Ind...',
         status: 'Open',
         teamSize: '1v1',
+        // This is the image for the Tournaments/Details page
         image: 'https://ik.imagekit.io/pimx50ija/a10b4aeb2ed3e55021954e9e0c6f46da.jpg?updatedAt=1755529182983',
+        // This is the special image ONLY for the Home page
+        homeImage: 'https://ik.imagekit.io/pimx50ija/5741f98c94fcddb5f3df4c1f21d8d411.jpg?updatedAt=1755529107252',
         prizePool: '₹5,000',
         rules: ['1 vs 1 match', 'No hacks allowed', 'Match time: 10 mins', 'Highest kill wins'],
         venue: 'To be Announced',
@@ -304,7 +308,8 @@ const FreeFire: React.FC = () => {
             <div className="tournament-list">
               {upcomingTournaments.map(t => (
                 <div key={t.id} className="tournament-card" onClick={() => handleViewDetails(t)}>
-                  <img src={t.image} alt={t.name} />
+                  {/* --- THIS LOGIC WAS CHANGED TO SHOW A DIFFERENT HOME IMAGE --- */}
+                  <img src={t.homeImage || t.image} alt={t.name} />
                   <div className="card-info">
                     <h3>{t.name}</h3>
                     <p>{t.date}</p>

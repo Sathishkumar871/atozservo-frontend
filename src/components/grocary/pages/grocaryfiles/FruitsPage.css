@@ -1,0 +1,163 @@
+/* src/FruitsPage.css */
+
+/* Overall Page Styles for Premium Look */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f7f3e9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+.fruits-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* --- Premium Single Banner Styles --- */
+.banner-container {
+  display: flex;
+  flex-direction: column; 
+  background-color: #ffecd1;
+  border-radius: 20px;
+  padding: 40px 20px;
+  margin: 20px 0;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.banner-content {
+  text-align: center;
+  padding: 20px;
+}
+.banner-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+.banner-subtitle {
+  font-size: 1rem;
+  color: #666;
+  max-width: 500px;
+  margin-bottom: 20px;
+}
+.banner-button {
+  background-color: #ffb800;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 50px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.banner-button:hover {
+  background-color: #e5a400;
+}
+.banner-image-container {
+  padding: 20px;
+}
+.banner-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 20px;
+}
+@media (min-width: 768px) {
+  .banner-container {
+    flex-direction: row; 
+    justify-content: space-between;
+    padding: 60px 80px;
+  }
+  .banner-content {
+    text-align: left;
+  }
+  .banner-title {
+    font-size: 3rem;
+  }
+  .banner-image-container {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+/* --- Featured Products Section --- */
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 40px 0 20px 0;
+  color: #333;
+}
+
+/* --- Filters Section --- */
+.filters {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 10px;
+}
+.search-box {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+}
+.search-box input {
+  width: 100%;
+  padding: 12px 40px 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+.search-box .clear-btn {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.filters select {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 50px;
+  font-size: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  background-color: white;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+@media (min-width: 768px) {
+  .filters {
+    flex-direction: row;
+  }
+  .search-box {
+    width: auto;
+    flex-grow: 1;
+    margin-right: 15px;
+    margin-bottom: 0;
+  }
+}
+
+/* --- Product Grid --- */
+.fruits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+.no-results {
+  text-align: center;
+  grid-column: 1 / -1;
+  font-size: 1.2rem;
+  color: #888;
+}
