@@ -4,7 +4,7 @@ import Menu from "./Menu";
 import Notification from "./Notification";
 import BottomNav from "./BottomNav";
 import PostServiceForm from "./PostServiceForm";
-import Scrolling from "./scrolling/scrolling";
+//import Scrolling from "./scrolling/scrolling";
 import MainButtons from './mainbuttons'; 
 
 import "./Home.css";
@@ -63,8 +63,7 @@ const Home: React.FC<Props> = ({ user, onLoginClick }) => {
 
         {/* --- మార్పు ఇక్కడే చేసాము --- */}
         {/* ఇప్పుడు Scrolling పైన ఉంది */}
-        <Scrolling />
-
+       
         {/* ఐకాన్ బటన్లు Scrolling కింద ఉన్నాయి */}
         <MainButtons />
 
